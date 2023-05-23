@@ -4,6 +4,13 @@
 #include <Time.h>
 #include <Windows.h>
 
+/// <summary>
+/// Initialises the engine
+/// </summary>
+/// <param name="Title"></param>
+/// <param name="Width"></param>
+/// <param name="Height"></param>
+/// <returns></returns>
 bool Engine::Engine::Init(const std::string& Title, int Width, int Height)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING != 0))
@@ -31,12 +38,15 @@ bool Engine::Engine::Init(const std::string& Title, int Width, int Height)
 		return false;
 	}
 
-
+	Test = new Object();
 
 	m_IsInit = true;
 	return true;
 }
 
+/// <summary>
+/// Engine core, this is where it boots up and then runs its game loop.
+/// </summary>
 void Engine::Engine::Start()
 {
 	if (!m_IsInit)
@@ -61,19 +71,27 @@ void Engine::Engine::Start()
 		// If there was more time between the frames than intended we run more updates to catch up.
 		while (_lag >= MilisecondsPerUpdate)
 		{
-			Update(_dt); // TEMP Deltatime is probably not being corrected for lag here.
+			Update(_dt* (_lag / MilisecondsPerUpdate)); // TEMP Deltatime is probably not being corrected for lag here.
 			_lag -= MilisecondsPerUpdate;
 		}
+
+		Render(_lag/MilisecondsPerUpdate,_dt);
+
+		float _sleeptime = clock() + MilisecondsPerUpdate - clock();
+		if (_sleeptime >= 0)
+		{
+			Sleep(clock() + MilisecondsPerUpdate - clock());
+		}
 		
-		Render();
-		Sleep(clock() + MilisecondsPerUpdate - clock());
 		_end = _start;
 	}
 	ShutDown();
 }
 
 
-
+/// <summary>
+/// Handle inputs.
+/// </summary>
 void Engine::Engine::ProcessInput()
 {
 	SDL_Event _event;
@@ -101,47 +119,67 @@ void Engine::Engine::ProcessInput()
 
 static float x = 0;
 static float y = 0;
+
+/// <summary>
+/// Update step, this is where the engine's logic happens.
+/// </summary>
+/// <param name="dt"></param>
 void Engine::Engine::Update(float dt)
 {
 	const unsigned char* _keyStates = SDL_GetKeyboardState(nullptr);
 	if (_keyStates[SDL_SCANCODE_D])
 	{
-		x += 100 * dt;
+		Test->SetVelX(100);
 	}
-	if (_keyStates[SDL_SCANCODE_A])
+	else if (_keyStates[SDL_SCANCODE_A])
 	{
-		x -= 100 * dt;
+		Test->SetVelX(-100);
 	}
+	else
+	{
+		Test->SetVelX(0);
+	}
+
 	if (_keyStates[SDL_SCANCODE_W])
 	{
-		y -= 100 * dt;
+		Test->SetVelY(-100);
 	}
-	if (_keyStates[SDL_SCANCODE_S])
+	else if (_keyStates[SDL_SCANCODE_S])
 	{
-		y += 100 * dt;
+		Test->SetVelY(100);
 	}
+	else
+	{
+		Test->SetVelY(0);
+	}
+	Test->Update(dt);
 }
 
-void Engine::Engine::Render()
+/// <summary>
+/// Renders the screen
+/// </summary>
+/// <param name="dt"></param>
+/// <param name="LagCorrection"></param>
+void Engine::Engine::Render(float dt,float LagCorrection)
 {
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_Renderer);
-	SDL_SetRenderDrawColor(m_Renderer, 255, 64, 64, 255);
-	SDL_Rect _rect = { 0 };
-	_rect.x = 100 + x;
-	_rect.y = 100 + y;
-	_rect.w = 100;
-	_rect.h = 100;
-	SDL_RenderFillRect(m_Renderer, &_rect);
+	Test->Draw(m_Renderer,LagCorrection,dt);
 	SDL_RenderPresent(m_Renderer);
 
 }
 
+/// <summary>
+/// Public function allowing to shutdown the engine.
+/// </summary>
 void Engine::Engine::Exit()
 {
 	ShutDown();
 }
 
+/// <summary>
+/// Destroys pointers and quits the application.
+/// </summary>
 void Engine::Engine::ShutDown()
 {
 	SDL_DestroyRenderer(m_Renderer);
@@ -149,6 +187,9 @@ void Engine::Engine::ShutDown()
 
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
+
+	delete(Test);
+	Test = nullptr;
 
 	SDL_Quit();
 

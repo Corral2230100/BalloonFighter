@@ -145,10 +145,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Sources\Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\Engine.h" />
+    <ClInclude Include="Object.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

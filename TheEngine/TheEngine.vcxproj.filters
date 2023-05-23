@@ -14,9 +14,15 @@
     <ClCompile Include="Sources\Engine.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\Engine.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>Includes</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "../Object.h"
 struct SDL_Window;
 struct SDL_Renderer;
 
@@ -14,9 +15,9 @@ namespace Engine
 	private:
 		void ProcessInput();
 		void Update(float dt);
-		void Render();
+		void Render(float dt,float LagCorrection);
 		void ShutDown();
-
+		Object* Test;
 	private:
 		bool m_IsRunning = false;
 		bool m_IsInit = false;
