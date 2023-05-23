@@ -1,0 +1,3 @@
+﻿LINK : warning LNK4075: ' /INCREMENTAL' ignoré à cause de la spécification '/OPT:REF'
+main.obj : warning LNK4075: ' /EDITANDCONTINUE' ignoré à cause de la spécification '/OPT:ICF'
+  Balloon Fighter Game.vcxproj -> C:\Users\2230100\source\repos\Balloon Fighter\x64\Debug\Balloon Fighter Game.exe

@@ -1,0 +1,5 @@
+﻿  Engine.cpp
+C:\Users\2230100\source\repos\Balloon Fighter\TheEngine\Sources\Engine.cpp(56,18): warning C4244: 'initialisation' : conversion de 'clock_t' en 'float', perte possible de données
+C:\Users\2230100\source\repos\Balloon Fighter\TheEngine\Sources\Engine.cpp(129,16): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\Users\2230100\source\repos\Balloon Fighter\TheEngine\Sources\Engine.cpp(130,16): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+  TheEngine.vcxproj -> C:\Users\2230100\source\repos\Balloon Fighter\x64\Debug\TheEngine.lib
