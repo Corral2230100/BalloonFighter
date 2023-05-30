@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <Time.h>
 #include <Windows.h>
-
+#include "SDLInput.h"
 /// <summary>
 /// Initialises the engine
 /// </summary>
@@ -13,6 +13,7 @@
 /// <returns></returns>
 bool Engine::Engine::Init(const std::string& Title, int Width, int Height)
 {
+	m_Input = new SDLInput();
 	if (SDL_Init(SDL_INIT_EVERYTHING != 0))
 	{
 		SDL_Log(SDL_GetError());
@@ -94,27 +95,7 @@ void Engine::Engine::Start()
 /// </summary>
 void Engine::Engine::ProcessInput()
 {
-	SDL_Event _event;
-
-	while (SDL_PollEvent(&_event))
-	{
-		switch (_event.type)
-		{
-		case SDL_QUIT:
-
-			Exit();
-			break;
-		case SDL_MOUSEBUTTONDOWN:
-			SDL_MouseButtonEvent _buttonDown = _event.button;
-			break;
-		case SDL_MOUSEBUTTONUP:
-			SDL_MouseButtonEvent _buttonUp = _event.button;
-			break;
-		case SDL_MOUSEMOTION:
-			SDL_MouseMotionEvent _motion = _event.motion;
-			break;
-		}
-	}
+	m_Input->Update();
 }
 
 static float x = 0;
@@ -126,12 +107,11 @@ static float y = 0;
 /// <param name="dt"></param>
 void Engine::Engine::Update(float dt)
 {
-	const unsigned char* _keyStates = SDL_GetKeyboardState(nullptr);
-	if (_keyStates[SDL_SCANCODE_D])
+	if (m_Input->IsKeyDown(EKey::EKEY_RIGHT) || m_Input->IsKeyDown(EKey::EKEY_D))
 	{
 		Test->SetVelX(100);
 	}
-	else if (_keyStates[SDL_SCANCODE_A])
+	else if (m_Input->IsKeyDown(EKey::EKEY_LEFT) || m_Input->IsKeyDown(EKey::EKEY_A))
 	{
 		Test->SetVelX(-100);
 	}
@@ -140,11 +120,11 @@ void Engine::Engine::Update(float dt)
 		Test->SetVelX(0);
 	}
 
-	if (_keyStates[SDL_SCANCODE_W])
+	if(m_Input->IsKeyDown(EKey::EKEY_UP) || m_Input->IsKeyDown(EKey::EKEY_W))
 	{
 		Test->SetVelY(-100);
 	}
-	else if (_keyStates[SDL_SCANCODE_S])
+	else if (m_Input->IsKeyDown(EKey::EKEY_DOWN) || m_Input->IsKeyDown(EKey::EKEY_S))
 	{
 		Test->SetVelY(100);
 	}
@@ -182,6 +162,12 @@ void Engine::Engine::Exit()
 /// </summary>
 void Engine::Engine::ShutDown()
 {
+	if (m_Input != nullptr)
+	{
+		delete(m_Input);
+		m_Input = nullptr;
+	}
+
 	SDL_DestroyRenderer(m_Renderer);
 	m_Renderer = nullptr;
 

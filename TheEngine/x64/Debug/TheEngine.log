@@ -1,5 +1,2 @@
-﻿  Engine.cpp
-C:\Users\2230100\source\repos\Balloon Fighter\TheEngine\Sources\Engine.cpp(57,18): warning C4244: 'initialisation' : conversion de 'clock_t' en 'float', perte possible de données
-C:\Users\2230100\source\repos\Balloon Fighter\TheEngine\Sources\Engine.cpp(68,19): warning C4101: 'dstrect' : variable locale non référencée
-C:\Users\2230100\source\repos\Balloon Fighter\TheEngine\Sources\Engine.cpp(69,13): warning C4101: 'color' : variable locale non référencée
+﻿  SDLInput.cpp
   TheEngine.vcxproj -> C:\Users\2230100\source\repos\Balloon Fighter\x64\Debug\TheEngine.lib

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include "../Object.h"
+#include "Object.h"
+#include "IInput.h"
 struct SDL_Window;
 struct SDL_Renderer;
 
@@ -12,7 +13,10 @@ namespace Engine
 		bool Init(const std::string& Title, int Width, int Height);
 		void Start();
 		void Exit();
+
+		IInput& Input() const { return *m_Input; }
 	private:
+		IInput* m_Input = nullptr;
 		void ProcessInput();
 		void Update(float dt);
 		void Render(float dt,float LagCorrection);

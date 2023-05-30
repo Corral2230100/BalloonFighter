@@ -146,11 +146,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="SDLInput.cpp" />
     <ClCompile Include="Sources\Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IGraphics.h" />
+    <ClInclude Include="IInput.h" />
     <ClInclude Include="Includes\Engine.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="SDLInput.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
