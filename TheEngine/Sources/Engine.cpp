@@ -4,6 +4,7 @@
 #include <Time.h>
 #include <Windows.h>
 #include "SDLInput.h"
+#include "SDLRender.h"
 /// <summary>
 /// Initialises the engine
 /// </summary>
@@ -14,6 +15,7 @@
 bool Engine::Engine::Init(const std::string& Title, int Width, int Height)
 {
 	m_Input = new SDLInput();
+	m_Graphics =  new SDLRender();
 	if (SDL_Init(SDL_INIT_EVERYTHING != 0))
 	{
 		SDL_Log(SDL_GetError());

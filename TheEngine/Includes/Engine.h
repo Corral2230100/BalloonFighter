@@ -2,6 +2,7 @@
 #include <string>
 #include "Object.h"
 #include "IInput.h"
+#include "IGraphics.h"
 struct SDL_Window;
 struct SDL_Renderer;
 
@@ -17,6 +18,8 @@ namespace Engine
 		IInput& Input() const { return *m_Input; }
 	private:
 		IInput* m_Input = nullptr;
+		IGraphics* m_Graphics = nullptr;
+		IGraphics* m_Graphics = nullptr;
 		void ProcessInput();
 		void Update(float dt);
 		void Render(float dt,float LagCorrection);
