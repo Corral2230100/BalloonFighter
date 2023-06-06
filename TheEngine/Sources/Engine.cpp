@@ -1,10 +1,10 @@
-#include "..\Includes\Engine.h"
 
-#include <SDL.h>
+#include "..\Includes\Engine.h"
 #include <Time.h>
 #include <Windows.h>
+#include "Console.h"
+#include "FileDebug.h"
 #include "SDLInput.h"
-#include "SDLRender.h"
 /// <summary>
 /// Initialises the engine
 /// </summary>
@@ -14,35 +14,20 @@
 /// <returns></returns>
 bool Engine::Engine::Init(const std::string& Title, int Width, int Height)
 {
+	m_World = new WorldService();
+	m_Graphics = new SDLRender();
 	m_Input = new SDLInput();
-	m_Graphics =  new SDLRender();
-	if (SDL_Init(SDL_INIT_EVERYTHING != 0))
-	{
-		SDL_Log(SDL_GetError());
-		return false;
-	}
-
-	int _x = SDL_WINDOWPOS_CENTERED;
-	int _y = SDL_WINDOWPOS_CENTERED;
-
-	Uint32 _flag = SDL_WINDOW_TOOLTIP | SDL_WINDOW_RESIZABLE;
-	m_Window = SDL_CreateWindow(Title.c_str(), _x, _y, Width, Height, _flag);
-	if (!m_Window)
-	{
-		SDL_Log(SDL_GetError());
-		return false;
-	}
-
-	_flag = SDL_RENDERER_ACCELERATED;
-	m_Renderer = SDL_CreateRenderer(m_Window, -1, _flag);
-	if (!m_Renderer)
-	{
-		SDL_Log(SDL_GetError());
-		return false;
-	}
-
-	Test = new Object();
-
+	m_Graphics->Initialize(Title, Width, Height);
+	
+#ifdef _DEBUG
+	m_Logger = new Console();
+#else
+	m_Logger = new FileDebug();
+#endif
+	m_Logger->Init();
+	Test = new Object("Object1");
+	m_World->Add(Test);
+	m_World->Add(new Object("Object2"));
 	m_IsInit = true;
 	return true;
 }
@@ -100,8 +85,8 @@ void Engine::Engine::ProcessInput()
 	m_Input->Update();
 }
 
-static float x = 0;
-static float y = 0;
+static float m_x = 0;
+static float m_y = 0;
 
 /// <summary>
 /// Update step, this is where the engine's logic happens.
@@ -109,6 +94,8 @@ static float y = 0;
 /// <param name="dt"></param>
 void Engine::Engine::Update(float dt)
 {
+
+	/// test player controller---------------
 	if (m_Input->IsKeyDown(EKey::EKEY_RIGHT) || m_Input->IsKeyDown(EKey::EKEY_D))
 	{
 		Test->SetVelX(100);
@@ -116,6 +103,7 @@ void Engine::Engine::Update(float dt)
 	else if (m_Input->IsKeyDown(EKey::EKEY_LEFT) || m_Input->IsKeyDown(EKey::EKEY_A))
 	{
 		Test->SetVelX(-100);
+		m_Logger->PrintWarning("aaaaaAAAAA LEEEFT");
 	}
 	else
 	{
@@ -134,7 +122,9 @@ void Engine::Engine::Update(float dt)
 	{
 		Test->SetVelY(0);
 	}
-	Test->Update(dt);
+	/// ---------------------------------------------------
+
+	m_World->Update(dt);
 }
 
 /// <summary>
@@ -144,11 +134,10 @@ void Engine::Engine::Update(float dt)
 /// <param name="LagCorrection"></param>
 void Engine::Engine::Render(float dt,float LagCorrection)
 {
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
-	SDL_RenderClear(m_Renderer);
-	Test->Draw(m_Renderer,LagCorrection,dt);
-	SDL_RenderPresent(m_Renderer);
-
+	m_Graphics ->SetColor(Color(0, 0, 0, 255));
+	m_Graphics->Clear();
+	m_World->Draw(m_Graphics,LagCorrection, dt);
+	m_Graphics->Present();
 }
 
 /// <summary>
@@ -164,22 +153,21 @@ void Engine::Engine::Exit()
 /// </summary>
 void Engine::Engine::ShutDown()
 {
+	
 	if (m_Input != nullptr)
 	{
 		delete(m_Input);
 		m_Input = nullptr;
 	}
-
-	SDL_DestroyRenderer(m_Renderer);
-	m_Renderer = nullptr;
-
-	SDL_DestroyWindow(m_Window);
-	m_Window = nullptr;
+	if (m_World != nullptr)
+	{
+		delete(m_World);
+		m_World = nullptr;
+	}
 
 	delete(Test);
 	Test = nullptr;
-
-	SDL_Quit();
-
+	m_Graphics->Shutdown();
+	m_Logger->Close();
 	m_IsRunning = false;
 }

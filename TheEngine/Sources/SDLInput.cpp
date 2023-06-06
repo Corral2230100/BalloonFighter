@@ -32,6 +32,7 @@ bool SDLInput::IsMouseButtonDown(Engine::EButton button)
 	return false;
 }
 
-void SDLInput::GetMousePosition(int* x, int* y)
+void SDLInput::GetMousePosition(int* m_x, int* m_y)
 {
+
 }

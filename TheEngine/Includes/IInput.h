@@ -1,6 +1,7 @@
 #pragma once
 namespace Engine
 {
+	// SCANCODE.H
 	enum class EButton
 	{
 		EBLeft = 0, EBRight = 1, EBMiddle = 3
@@ -30,7 +31,7 @@ namespace Engine
 
 		virtual bool IsKeyDown(EKey key) = 0;
 		virtual bool IsMouseButtonDown(EButton button) = 0;
-		virtual void GetMousePosition(int* x, int* y) = 0;
+		virtual void GetMousePosition(int* m_x, int* m_y) = 0;
 
 	private:
 		friend class Engine;

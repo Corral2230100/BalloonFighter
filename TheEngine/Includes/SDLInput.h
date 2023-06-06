@@ -8,7 +8,7 @@ public:
 
 	virtual bool IsKeyDown(Engine::EKey key) override;
 	virtual bool IsMouseButtonDown(Engine::EButton button) override;
-	virtual void GetMousePosition(int* x, int* y) override;
+	virtual void GetMousePosition(int* m_x, int* m_y) override;
 
 private:
 	const unsigned char* m_KeyStates = nullptr;

@@ -1,40 +1,52 @@
 #include "Object.h"
 #include <SDL.h>
-Object::Object()
+Engine::Object::Object(const std::string& Name)
+	:m_Name(Name)
 {
 
 }
 
-Object::~Object()
+Engine::Object::~Object()
 {
 
 }
 
-void Object::Update(float dt)
+void Engine::Object::Update(float dt)
 {
-	x += VelX * dt;
-	y += VelY * dt;
+	if (!m_Active) return;
+	m_x += VelX * dt;
+	m_y += VelY * dt;
 }
 
-void Object::Draw(SDL_Renderer* Renderer, float LagCorrection, float dt)
+void  Engine::Object::Draw(IGraphics* Renderer, float LagCorrection, float dt)
 {
-	SDL_SetRenderDrawColor(Renderer, 255, 64, 64, 255);
-	SDL_Rect _rect = { 0 };
-	_rect.x = x+((VelX*dt)*LagCorrection);
-	_rect.y = y + ((VelY * dt) * LagCorrection);
-	_rect.w = 100;
-	_rect.h = 100;
-	SDL_RenderFillRect(Renderer, &_rect);
+	if (!m_Active) return;
+
 }
 
-void Object::SetVelX(float Vel)
+void  Engine::Object::SetVelX(float Vel)
 {
 	VelX = Vel;
 }
-void Object::SetVelY(float Vel)
+void  Engine::Object::SetVelY(float Vel)
 {
 	VelY = Vel;
 }
+
+void  Engine::Object::SetPosition(float NewX, float NewY)
+{
+	m_x = NewX;
+	m_y = NewY;
+}
+
+void  Engine::Object::SetActive(bool Setting)
+{
+	m_Active = Setting;
+}
+
+
+
+
 
 /*
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@&&&BBBBBGGGPPP55555PPG##&@@@@@@@@@@@@@@@&##BGGBBG55555BB#@@@@@@@@@@@@@
