@@ -5,6 +5,7 @@
 #include "Console.h"
 #include "FileDebug.h"
 #include "SDLInput.h"
+
 /// <summary>
 /// Initialises the engine
 /// </summary>
@@ -26,8 +27,8 @@ bool Engine::Engine::Init(const std::string& Title, int Width, int Height)
 #endif
 	m_Logger->Init();
 	Test = new Object("Object1");
-	m_World->Add(Test);
-	m_World->Add(new Object("Object2"));
+	m_World->Add(Test, m_Graphics);
+	m_World->Add(new Object("Object2"),m_Graphics);
 	m_IsInit = true;
 	return true;
 }
@@ -82,6 +83,7 @@ void Engine::Engine::Start()
 /// </summary>
 void Engine::Engine::ProcessInput()
 {
+	if (!m_IsRunning) return;
 	m_Input->Update();
 }
 
@@ -95,6 +97,7 @@ static float m_y = 0;
 void Engine::Engine::Update(float dt)
 {
 
+	if (!m_IsRunning) return;
 	/// test player controller---------------
 	if (m_Input->IsKeyDown(EKey::EKEY_RIGHT) || m_Input->IsKeyDown(EKey::EKEY_D))
 	{
@@ -123,8 +126,13 @@ void Engine::Engine::Update(float dt)
 		Test->SetVelY(0);
 	}
 	/// ---------------------------------------------------
-
 	m_World->Update(dt);
+#ifdef _DEBUG
+	if (m_Input->IsKeyDown(EKey::EKEY_ESCAPE))
+	{
+		Exit();
+	}
+#endif
 }
 
 /// <summary>
@@ -134,9 +142,11 @@ void Engine::Engine::Update(float dt)
 /// <param name="LagCorrection"></param>
 void Engine::Engine::Render(float dt,float LagCorrection)
 {
+	if (!m_IsRunning) return;
 	m_Graphics ->SetColor(Color(0, 0, 0, 255));
 	m_Graphics->Clear();
 	m_World->Draw(m_Graphics,LagCorrection, dt);
+	Test->Draw(m_Graphics, 0, 0);
 	m_Graphics->Present();
 }
 
@@ -165,8 +175,6 @@ void Engine::Engine::ShutDown()
 		m_World = nullptr;
 	}
 
-	delete(Test);
-	Test = nullptr;
 	m_Graphics->Shutdown();
 	m_Logger->Close();
 	m_IsRunning = false;

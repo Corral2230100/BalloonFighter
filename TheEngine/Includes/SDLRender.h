@@ -1,9 +1,10 @@
 #pragma once
 #include "IGraphics.h"
+#include "SDL_ttf.h"
 #include <string>
-
-class SDL_Window;
-class SDL_Renderer;
+#include <map>
+struct SDL_Window;
+struct SDL_Renderer;
 namespace Engine
 {
 
@@ -13,11 +14,6 @@ class SDLRender : public IGraphics
 
 	public:
 		//void Draw(float dt, float LagCorrection) override;
-	private:
-		SDL_Window* m_Window = nullptr;
-		SDL_Renderer* m_Renderer = nullptr;
-		
-		// Hérité via IGraphics
 		virtual bool Initialize(const std::string& Title, int Width, int Height) override;
 		virtual void Shutdown() override;
 		virtual void SetColor(const Color& color) override;
@@ -36,5 +32,14 @@ class SDLRender : public IGraphics
 		virtual size_t LoadFont(const std::string& filename, int fontSize) override;
 		virtual void DrawString(const std::string& text, size_t fontId, float x, float y, const Color& color) override;
 		virtual void GetTextSize(const std::string& text, size_t fontId, int* w, int* h) override;
+	private:
+		SDL_Window* m_Window = nullptr;
+		SDL_Renderer* m_Renderer = nullptr;
+		std::map<std::string, size_t> m_TextureIdList;
+		std::map<size_t, SDL_Texture*> m_TextureList;
+		std::map<std::string, size_t> m_FontIdList;
+		std::map<size_t, TTF_Font*> m_FontList;
+		SDL_Texture* m_TextureBuffer;
 	};
+
 }

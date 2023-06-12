@@ -2,6 +2,8 @@
 #include <SDL.h>
 Engine::Object::Object(const std::string& Name)
 	:m_Name(Name)
+	,m_x(0)
+	,m_y(0)
 {
 
 }
@@ -18,10 +20,22 @@ void Engine::Object::Update(float dt)
 	m_y += VelY * dt;
 }
 
+void Engine::Object::Init(IGraphics* Renderer)
+{
+	m_SpriteId = Renderer->LoadTexture("Assets/Fighter.png");
+}
+
 void  Engine::Object::Draw(IGraphics* Renderer, float LagCorrection, float dt)
 {
-	if (!m_Active) return;
 
+	if (!m_Active) return;
+	RectF _dest = { m_x,m_y,32,32 };
+	RectI _src = { 8,8,32,32 };
+	Flip _flip = { false,false };
+	double _angle = 0;
+	Color _color = { 100,100,100,100 };
+	Renderer->DrawTexture(m_SpriteId, _src, _dest, _angle, _flip,_color);
+	Renderer->DrawRect(m_x,m_y,32,32,_color);
 }
 
 void  Engine::Object::SetVelX(float Vel)

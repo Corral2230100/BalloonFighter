@@ -10,11 +10,13 @@ namespace Engine
 		Object(const std::string& name);
 		virtual ~Object();
 		void Update(float dt);
+		void Init(IGraphics* Renderer);
 		void Draw(IGraphics* Renderer, float LagCorrection, float dt);
 		void SetVelX(float Vel);
 		void SetVelY(float Vel);
 		void SetPosition(float NewX, float NewY);
 		void SetActive(bool Setting);
+		
 		std::string GetName() { return m_Name; }
 	private:
 		/// put this in a struct later
@@ -23,6 +25,10 @@ namespace Engine
 		float VelX = 0;
 		float VelY = 0;
 		float m_Active = true;
+		/// Need to put this in another class later VV
+		size_t m_SpriteId = 0;
+		
+
 		std::string m_Name;
 
 	};

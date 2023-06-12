@@ -22,15 +22,22 @@ namespace Engine
 	};
 	struct RectF
 	{
-
+		float x;
+		float y;
+		float w;
+		float h;
 	};
 	struct RectI
 	{
-
+		int x;
+		int y;
+		int w;
+		int h;
 	};
-	enum Flip
+	struct Flip
 	{
-
+		bool h;
+		bool v;
 	};
 	class IGraphics
 	{

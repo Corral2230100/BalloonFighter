@@ -8,7 +8,7 @@ class WorldService
 {
 
 public:
-	~WorldService()
+	virtual ~WorldService()
 	{
 		for (auto entity : m_EntityWorld)
 		{
@@ -21,10 +21,11 @@ public:
 		m_EntityMap.clear();
 		m_EntityWorld.clear();
 	}
-	void Add(Engine::Object* Entity)
+	void Add(Engine::Object* Entity, Engine::IGraphics* Renderer)
 	{
 		m_EntityWorld.push_back(Entity);
 		m_EntityMap.emplace(Entity->GetName(), Entity);
+		Entity->Init(Renderer);
 	}
 	void Remove(Engine::Object* PEntity)
 	{
