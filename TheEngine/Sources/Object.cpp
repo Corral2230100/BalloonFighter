@@ -23,6 +23,7 @@ void Engine::Object::Update(float dt)
 void Engine::Object::Init(IGraphics* Renderer)
 {
 	m_SpriteId = Renderer->LoadTexture("Assets/Fighter.png");
+
 }
 
 void  Engine::Object::Draw(IGraphics* Renderer, float LagCorrection, float dt)
@@ -30,12 +31,11 @@ void  Engine::Object::Draw(IGraphics* Renderer, float LagCorrection, float dt)
 
 	if (!m_Active) return;
 	RectF _dest = { m_x,m_y,32,32 };
-	RectI _src = { 8,8,32,32 };
+	RectI _src = { 8,8,24,24 };
 	Flip _flip = { false,false };
 	double _angle = 0;
-	Color _color = { 100,100,100,100 };
+	Color _color = { 255,255,255,255 };
 	Renderer->DrawTexture(m_SpriteId, _src, _dest, _angle, _flip,_color);
-	Renderer->DrawRect(m_x,m_y,32,32,_color);
 }
 
 void  Engine::Object::SetVelX(float Vel)

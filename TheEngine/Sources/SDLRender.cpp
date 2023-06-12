@@ -53,9 +53,8 @@ void Engine::SDLRender::SetColor(const Color& color)
 
 void Engine::SDLRender::Clear()
 {
-	
-	SDL_RenderClear(m_Renderer);
 	SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
+	SDL_RenderClear(m_Renderer);
 
 }
 
@@ -126,7 +125,9 @@ size_t Engine::SDLRender::LoadTexture(const std::string& filename)
 	if (_textureId == m_TextureIdList[filename]) {
 		return _textureId;
 	}
-	SDL_Texture* _texture = IMG_LoadTexture(m_Renderer, filename.c_str());
+	std::string _path = static_cast<std::string>(SDL_GetBasePath()) + filename.c_str();
+	SDL_Texture* _texture = IMG_LoadTexture(m_Renderer,_path.c_str());
+
 	if (_texture != nullptr) {
 		m_TextureIdList.emplace(filename.c_str(),_textureId);
 		m_TextureList[_textureId] = _texture;

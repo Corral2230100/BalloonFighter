@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "IInput.h"
 #include "IGraphics.h"
+#include "IAudio.h"
 #include "WorldService.h"
 #include "ILogger.h"
 
@@ -20,8 +21,9 @@ namespace Engine
 		IInput& Input() const { return *m_Input; }
 	private:
 		IInput* m_Input = nullptr;
-		ILogger* m_Logger;
+		ILogger* m_Logger = nullptr;
 		IGraphics* m_Graphics = nullptr;
+		IAudio* m_AudioService = nullptr;
 		void ProcessInput();
 		void Update(float dt);
 		void Render(float dt,float LagCorrection);

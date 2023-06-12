@@ -1,10 +1,12 @@
 
-#include "..\Includes\Engine.h"
+#include "Engine.h"
 #include <Time.h>
 #include <Windows.h>
 #include "Console.h"
 #include "FileDebug.h"
 #include "SDLInput.h"
+#include "SDLMixer.h"
+#include "SDL.h"
 
 /// <summary>
 /// Initialises the engine
@@ -18,17 +20,26 @@ bool Engine::Engine::Init(const std::string& Title, int Width, int Height)
 	m_World = new WorldService();
 	m_Graphics = new SDLRender();
 	m_Input = new SDLInput();
+	m_AudioService = new SDLMixer();
+	m_AudioService->Init();
 	m_Graphics->Initialize(Title, Width, Height);
 	
 #ifdef _DEBUG
 	m_Logger = new Console();
+
 #else
 	m_Logger = new FileDebug();
 #endif
 	m_Logger->Init();
+	
+	/// Trucs debug
 	Test = new Object("Object1");
 	m_World->Add(Test, m_Graphics);
 	m_World->Add(new Object("Object2"),m_Graphics);
+	m_Logger->Print(SDL_GetBasePath());
+	size_t _testmusic = m_AudioService->LoadMusic("Assets/Sounds/TitleSong.mp3");
+	m_AudioService->PlayMusic(_testmusic);
+	///
 	m_IsInit = true;
 	return true;
 }
@@ -143,7 +154,6 @@ void Engine::Engine::Update(float dt)
 void Engine::Engine::Render(float dt,float LagCorrection)
 {
 	if (!m_IsRunning) return;
-	m_Graphics ->SetColor(Color(0, 0, 0, 255));
 	m_Graphics->Clear();
 	m_World->Draw(m_Graphics,LagCorrection, dt);
 	Test->Draw(m_Graphics, 0, 0);
