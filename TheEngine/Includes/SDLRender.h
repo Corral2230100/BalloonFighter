@@ -33,7 +33,6 @@ class SDLRender : public IGraphics
 		virtual void GetTextureSize(size_t id, int* w, int* h) override;
 		virtual size_t LoadFont(const std::string& filename, int fontSize) override;
 		virtual void DrawString(const std::string& text, size_t fontId, float x, float y, const Color& color) override;
-		virtual void GetTextSize(const std::string& text, size_t fontId, int* w, int* h) override;
 	private:
 		SDL_Window* m_Window = nullptr;
 		SDL_Renderer* m_Renderer = nullptr;

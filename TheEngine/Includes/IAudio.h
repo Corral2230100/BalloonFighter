@@ -15,8 +15,10 @@ namespace Engine
 		virtual void PauseMusic() = 0;
 		virtual void StopMusic() = 0;
 		virtual void ResumeMusic() = 0;
-		virtual void SetVolume(int volume) = 0;
+		virtual void SetGlobalVolume(int volume) = 0;
+		virtual void SetMusicVolume(int volume) = 0;
 		virtual void SetVolume(size_t soundId, int volume) = 0;
+		virtual void ShutDown() = 0;
 	};
 }
 

@@ -43,6 +43,7 @@ namespace Engine
 		size_t _testmusic = m_AudioService->LoadMusic("Assets/Sounds/TitleSong.mp3");
 		_Goodtime = m_AudioService->LoadSound("Assets/Sounds/sfx4.wav");
 		m_AudioService->PlayMusic(_testmusic);
+		m_AudioService->SetMusicVolume(40);
 		///
 		m_IsInit = true;
 		return true;

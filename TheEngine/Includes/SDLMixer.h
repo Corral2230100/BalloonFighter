@@ -1,13 +1,15 @@
 #pragma once
 #include "IAudio.h"
-#include "SDL_mixer.h"
+
 #include <string>
 #include <map>
+struct Mix_Chunk;
+typedef struct _Mix_Music Mix_Music;
 namespace Engine
 {
 	class SDLMixer : public IAudio
 	{
-		
+
 	public:
 		
 		virtual void Init() override;
@@ -20,11 +22,19 @@ namespace Engine
 		virtual void PauseMusic() override;
 		virtual void StopMusic() override;
 		virtual void ResumeMusic() override;
-		virtual void SetVolume(int volume) override;
+		virtual void SetGlobalVolume(int volume) override;
+		virtual void SetMusicVolume(int volume) override;
 		virtual void SetVolume(size_t soundId, int volume) override;
+		virtual void ShutDown() override;
 	private:
 		std::map<size_t, Mix_Chunk*> *m_SoundList = new std::map<size_t, Mix_Chunk*>();
 		std::map<size_t, Mix_Music*> *m_MusicList = new std::map<size_t, Mix_Music*>();
+
+
+
+		// Inherited via IAudio
+
+
 	};
 
 

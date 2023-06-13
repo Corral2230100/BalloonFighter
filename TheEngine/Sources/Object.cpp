@@ -5,6 +5,10 @@
 #include <IUpdateable.h>
 namespace Engine
 {
+	/// <summary>
+	/// Constructeur
+	/// </summary>
+	/// <param name="Name"></param>
 	Object::Object(const std::string& Name)
 		:m_Name(Name)
 		, m_x(0)
@@ -12,7 +16,9 @@ namespace Engine
 	{
 
 	}
-
+	/// <summary>
+	/// Deconstructeur
+	/// </summary>
 	Object::~Object()
 	{
 		for (auto iter : m_Components)
@@ -27,6 +33,11 @@ namespace Engine
 		m_ComponentByType.clear();
 	}
 
+	/// <summary>
+	/// Updates the object, Also updates it's components.
+	/// Changes the object's position relative to its velocity. To be replaced by a component.
+	/// </summary>
+	/// <param name="dt"></param>
 	void Object::Update(float dt)
 	{
 		if (!m_Active) return;
@@ -34,16 +45,23 @@ namespace Engine
 		m_y += VelY * dt;
 		for (auto iter : m_ComponentByType)
 		{
-
+			// Update the components here
 		}
 	}
 
+	/// <summary>
+	/// Loads the object's texture, TO BE REMOVED 
+	/// </summary>
 	void Object::Init()
 	{
 		m_SpriteId = Engine::Get().Graphics().LoadTexture("Assets/Fighter.png");
-
 	}
 
+	/// <summary>
+	/// Draws the object, most of this will be replaced by a component
+	/// </summary>
+	/// <param name="LagCorrection"></param>
+	/// <param name="dt"></param>
 	void  Object::Draw(float LagCorrection, float dt)
 	{
 
@@ -56,15 +74,28 @@ namespace Engine
 		Engine::Get().Graphics().DrawTexture(m_SpriteId, _src, _dest, _angle, _flip, _color);
 	}
 
+	/// <summary>
+	/// Changes the object's x velocity.
+	/// </summary>
+	/// <param name="Vel"></param>
 	void  Object::SetVelX(float Vel)
 	{
 		VelX = Vel;
 	}
+	/// <summary>
+	/// Changes the object's y velocity
+	/// </summary>
+	/// <param name="Vel"></param>
 	void  Object::SetVelY(float Vel)
 	{
 		VelY = Vel;
 	}
 
+	/// <summary>
+	/// Manually sets the object's position;
+	/// </summary>
+	/// <param name="NewX"></param>
+	/// <param name="NewY"></param>
 	void  Object::SetPosition(float NewX, float NewY)
 	{
 		m_x = NewX;

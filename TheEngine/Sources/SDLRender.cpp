@@ -5,6 +5,11 @@
 #include <SDL.h>
 
 
+/// <summary>
+/// Converts engine's color struct to SDL's
+/// </summary>
+/// <param name="_color"></param>
+/// <returns></returns>
 static SDL_Color ColorToSDLColor(Engine::Color _color)
 {
 	SDL_Color _newcolor = {};
@@ -15,6 +20,11 @@ static SDL_Color ColorToSDLColor(Engine::Color _color)
 	return _newcolor;
 }
 
+/// <summary>
+/// Converts engine's RectF to SDL's Rect
+/// </summary>
+/// <param name="_rect"></param>
+/// <returns></returns>
 static SDL_Rect RectFToSDLRect(Engine::RectF _rect)
 {
 	SDL_Rect _newrect = { 0 };
@@ -25,6 +35,11 @@ static SDL_Rect RectFToSDLRect(Engine::RectF _rect)
 
 	return _newrect;
 }
+/// <summary>
+/// Converts engine's RectI to SDL's Rect
+/// </summary>
+/// <param name="_rect"></param>
+/// <returns></returns>
 static SDL_Rect RectIToSDLRect(Engine::RectI _rect)
 {
 	SDL_Rect _newrect = { 0 };
@@ -35,6 +50,13 @@ static SDL_Rect RectIToSDLRect(Engine::RectI _rect)
 
 	return _newrect;
 }
+/// <summary>
+/// Initialises the renderer, creates the window, generates the surface.
+/// </summary>
+/// <param name="Title"></param>
+/// <param name="Width"></param>
+/// <param name="Height"></param>
+/// <returns></returns>
 bool Engine::SDLRender::Initialize(const std::string& Title, int Width, int Height)
 {
 
@@ -68,6 +90,9 @@ bool Engine::SDLRender::Initialize(const std::string& Title, int Width, int Heig
 	return false;
 }
 
+/// <summary>
+/// Shuts down the renderer, cleans up the surfaces, closes the window.
+/// </summary>
 void Engine::SDLRender::Shutdown()
 {
 	for (auto &iter : *m_TextureList)
@@ -93,12 +118,19 @@ void Engine::SDLRender::Shutdown()
 	SDL_Quit();
 }
 
+/// <summary>
+/// Sets the renderer draw color.
+/// </summary>
+/// <param name="color"></param>
 void Engine::SDLRender::SetColor(const Color& color)
 {
 	SDL_Color _color = ColorToSDLColor(color);
 	SDL_SetRenderDrawColor(m_Renderer,_color.r,_color.g,_color.b,_color.a);
 }
 
+/// <summary>
+/// Clears the surface
+/// </summary>
 void Engine::SDLRender::Clear()
 {
 	SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
@@ -106,11 +138,22 @@ void Engine::SDLRender::Clear()
 
 }
 
+/// <summary>
+/// Shows the surface to the screen.
+/// </summary>
 void Engine::SDLRender::Present()
 {
 	SDL_RenderPresent(m_Renderer);
 }
 
+/// <summary>
+/// Draws a rectangle
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="w"></param>
+/// <param name="h"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::DrawRect(float x, float y, float w, float h, const Color& color)
 {
 	SetColor(color);
@@ -122,6 +165,11 @@ void Engine::SDLRender::DrawRect(float x, float y, float w, float h, const Color
 	SDL_RenderFillRect(m_Renderer, &_rect);
 }
 
+/// <summary>
+/// Draws a rectangle
+/// </summary>
+/// <param name="rect"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::DrawRect(const RectF& rect, const Color& color)
 {
 	SetColor(color);
@@ -129,6 +177,14 @@ void Engine::SDLRender::DrawRect(const RectF& rect, const Color& color)
 	SDL_RenderDrawRect(m_Renderer, &_rect);
 }
 
+/// <summary>
+/// Draws another rectangle
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="w"></param>
+/// <param name="h"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::FillRect(float x, float y, float w, float h, const Color& color)
 {
 	SetColor(color);
@@ -141,6 +197,11 @@ void Engine::SDLRender::FillRect(float x, float y, float w, float h, const Color
 	SDL_RenderFillRect(m_Renderer, &_rect);
 }
 
+/// <summary>
+/// Draws another rectangle
+/// </summary>
+/// <param name="rect"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::FillRect(const RectF& rect, const Color& color)
 {
 	SetColor(color);
@@ -149,12 +210,25 @@ void Engine::SDLRender::FillRect(const RectF& rect, const Color& color)
 	SDL_RenderFillRect(m_Renderer, &_rect);
 }
 
+/// <summary>
+/// Draws a line between two given x y coordinates.
+/// </summary>
+/// <param name="x1"></param>
+/// <param name="y1"></param>
+/// <param name="x2"></param>
+/// <param name="y2"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::DrawLine(float x1, float y1, float x2, float y2, const Color& color)
 {
 	SetColor(color);
 	SDL_RenderDrawLine(m_Renderer, static_cast<int>(x1), static_cast<int>(y1), static_cast<int>(x2), static_cast<int>(y2));
 }
 
+/// <summary>
+/// Loads a texture into memory and stores it.
+/// </summary>
+/// <param name="filename"></param>
+/// <returns>the texture's hashed id or an existing one if the texture already existed</returns>
 size_t Engine::SDLRender::LoadTexture(const std::string& filename)
 {
 	const size_t _textureId = std::hash<std::string>()(filename);
@@ -172,6 +246,15 @@ size_t Engine::SDLRender::LoadTexture(const std::string& filename)
 	return -1;
 }
 
+/// <summary>
+/// Draws a texture to the surface given parameters.
+/// </summary>
+/// <param name="id"></param>
+/// <param name="src"></param>
+/// <param name="dst"></param>
+/// <param name="angle"></param>
+/// <param name="flip"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
 {
 
@@ -198,6 +281,12 @@ void Engine::SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& ds
 	SDL_RenderCopyEx(m_Renderer, _texture, &_rect, &_rectF, angle, nullptr, _sdlflip);
 }
 
+/// <summary>
+/// Draws a texture to the surface given parameters.
+/// </summary>
+/// <param name="id"></param>
+/// <param name="dst"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::DrawTexture(size_t id, const RectF& dst, const Color& color)
 {
 
@@ -209,6 +298,11 @@ void Engine::SDLRender::DrawTexture(size_t id, const RectF& dst, const Color& co
 	SDL_RenderCopyEx(m_Renderer, _texture, nullptr, &_rectF, 0, nullptr, _sdlflip);
 }
 
+/// <summary>
+/// Draws a texture to the surface given parameters.
+/// </summary>
+/// <param name="id"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::DrawTexture(size_t id, const Color& color)
 {
 	SDL_Texture* _texture = (*m_TextureList)[id];
@@ -221,6 +315,12 @@ void Engine::SDLRender::GetTextureSize(size_t id, int* w, int* h)
 {
 }
 
+/// <summary>
+/// Loads a font into memory and stores it
+/// </summary>
+/// <param name="filename"></param>
+/// <param name="fontSize"></param>
+/// <returns>returns the font's hashed id or an existing one if it was already loaded.</returns>
 size_t Engine::SDLRender::LoadFont(const std::string& filename, int fontSize)
 {
 	const size_t _fontId = std::hash<std::string>()(filename);
@@ -239,6 +339,14 @@ size_t Engine::SDLRender::LoadFont(const std::string& filename, int fontSize)
 	return -1;
 }
 
+/// <summary>
+/// Draws a string onto the surface with given parameters.
+/// </summary>
+/// <param name="text"></param>
+/// <param name="fontId"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="color"></param>
 void Engine::SDLRender::DrawString(const std::string& text, size_t fontId, float x, float y, const Color& color)
 {
 
@@ -259,6 +367,3 @@ void Engine::SDLRender::DrawString(const std::string& text, size_t fontId, float
 	}
 }
 
-void Engine::SDLRender::GetTextSize(const std::string& text, size_t fontId, int* w, int* h)
-{
-}
