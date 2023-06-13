@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 #include "Engine.h"
-
+#include "vld.h"
 void InitGameplay()
 {
 
@@ -17,5 +17,6 @@ INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT)
 		InitGameplay();
 		TheEngine.Start();
 	}
+	delete &TheEngine;
 	return 0;
 }

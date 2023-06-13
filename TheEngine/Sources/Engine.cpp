@@ -6,7 +6,6 @@
 #include "FileDebug.h"
 #include "SDLInput.h"
 #include "SDLMixer.h"
-#include "SDL.h"
 namespace Engine
 {
 
@@ -19,13 +18,6 @@ namespace Engine
 	/// <returns></returns>
 	bool Engine::Init(const std::string& Title, int Width, int Height)
 	{
-		m_World = new WorldService();
-		m_Graphics = new SDLRender();
-		m_Input = new SDLInput();
-		m_AudioService = new SDLMixer();
-		m_AudioService->Init();
-		m_Graphics->Initialize(Title, Width, Height);
-
 #ifdef _DEBUG
 		m_Logger = new Console();
 
@@ -33,6 +25,14 @@ namespace Engine
 		m_Logger = new FileDebug();
 #endif
 		m_Logger->Init();
+		m_World = new WorldService();
+		m_Graphics = new SDLRender();
+		m_Input = new SDLInput();
+		m_AudioService = new SDLMixer();
+		m_AudioService->Init();
+		m_Graphics->Initialize(Title, Width, Height);
+
+
 
 		/// Trucs debug
 		_TestText = m_Graphics->LoadFont("Assets/slkscr.ttf", 24);
@@ -143,6 +143,7 @@ namespace Engine
 #ifdef _DEBUG
 		if (m_Input->IsKeyDown(EKey::EKEY_ESCAPE))
 		{
+			Test = nullptr;
 			Exit();
 		}
 #endif
@@ -187,9 +188,25 @@ namespace Engine
 			delete(m_World);
 			m_World = nullptr;
 		}
-
-		m_Graphics->Shutdown();
-		m_Logger->Close();
+		if (m_Graphics != nullptr)
+		{
+			m_Graphics->Shutdown();
+			delete(m_Graphics);
+			m_Graphics = nullptr;
+		}
+		if (m_AudioService != nullptr)
+		{
+			m_AudioService->StopMusic();
+			delete(m_AudioService);
+			m_AudioService = nullptr;
+		}
+		if (m_Logger != nullptr)
+		{
+			m_Logger->Close();
+			delete(m_Logger);
+			m_Logger = nullptr;
+		}
+		
 		m_IsRunning = false;
 	}
 }

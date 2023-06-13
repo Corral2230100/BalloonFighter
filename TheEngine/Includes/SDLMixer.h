@@ -23,10 +23,8 @@ namespace Engine
 		virtual void SetVolume(int volume) override;
 		virtual void SetVolume(size_t soundId, int volume) override;
 	private:
-		std::map<std::string, size_t> m_SoundIdList;
-		std::map<size_t, Mix_Chunk*> m_SoundList;
-		std::map<std::string, size_t> m_MusicIdList;
-		std::map<size_t, Mix_Music*> m_MusicList;
+		std::map<size_t, Mix_Chunk*> *m_SoundList = new std::map<size_t, Mix_Chunk*>();
+		std::map<size_t, Mix_Music*> *m_MusicList = new std::map<size_t, Mix_Music*>();
 	};
 
 

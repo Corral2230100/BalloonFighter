@@ -6,7 +6,7 @@ project.addIncludeDir("TheEngine/Includes")
 project.addIncludeDir("./SDL2/include");
 project.addIncludeDir("Balloon Fighter Game/Includes")
 project.addFile('Balloon Fighter Game/**');
-project.setDebugDir('Deployment');
+project.setDebugDir('./Deployment');
 project.flatten();
 
 const otherproj = await project.addProject("TheEngine");

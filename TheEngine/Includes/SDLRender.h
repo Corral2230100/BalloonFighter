@@ -35,10 +35,10 @@ class SDLRender : public IGraphics
 	private:
 		SDL_Window* m_Window = nullptr;
 		SDL_Renderer* m_Renderer = nullptr;
-		std::map<std::string, size_t> m_TextureIdList;
-		std::map<size_t, SDL_Texture*> m_TextureList;
-		std::map<std::string, size_t> m_FontIdList;
-		std::map<size_t, TTF_Font*> m_FontList;
+
+		std::map<size_t, SDL_Texture*>* m_TextureList = new std::map<size_t, SDL_Texture*>();
+		std::map<size_t, TTF_Font*>* m_FontList = new std::map<size_t, TTF_Font*>();
+
 		SDL_Texture* m_TextureBuffer;
 	};
 

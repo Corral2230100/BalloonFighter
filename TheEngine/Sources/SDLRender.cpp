@@ -36,7 +36,20 @@ bool Engine::SDLRender::Initialize(const std::string& Title, int Width, int Heig
 
 void Engine::SDLRender::Shutdown()
 {
-
+	for (auto &iter : *m_TextureList)
+	{
+		SDL_DestroyTexture(iter.second);
+		//iter.second = nullptr;
+	}
+	for (auto iter : *m_FontList)
+	{
+		TTF_CloseFont(iter.second);
+		//iter.second = nullptr;
+	}
+	m_FontList->clear();
+	m_TextureList->clear();
+	delete m_TextureList;
+	delete m_FontList;
 	TTF_Quit();
 	SDL_DestroyRenderer(m_Renderer);
 	m_Renderer = nullptr;
@@ -96,7 +109,6 @@ void Engine::SDLRender::FillRect(float x, float y, float w, float h, const Color
 	_rect.w = w;
 	_rect.h = h;
 
-
 	SDL_RenderFillRect(m_Renderer, &_rect);
 }
 
@@ -108,7 +120,6 @@ void Engine::SDLRender::FillRect(const RectF& rect, const Color& color)
 	_rect.y = rect.y;
 	_rect.w = rect.w;
 	_rect.h = rect.h;
-
 
 	SDL_RenderFillRect(m_Renderer, &_rect);
 }
@@ -122,15 +133,14 @@ void Engine::SDLRender::DrawLine(float x1, float y1, float x2, float y2, const C
 size_t Engine::SDLRender::LoadTexture(const std::string& filename)
 {
 	const size_t _textureId = std::hash<std::string>()(filename);
-	if (_textureId == m_TextureIdList[filename]) {
+	if (m_TextureList->count(_textureId) > 0) {
 		return _textureId;
 	}
 	std::string _path = SDL_GetBasePath() + filename;
 	SDL_Texture* _texture = IMG_LoadTexture(m_Renderer,_path.c_str());
 
 	if (_texture != nullptr) {
-		m_TextureIdList.emplace(filename.c_str(),_textureId);
-		m_TextureList[_textureId] = _texture;
+		(*m_TextureList)[_textureId] = _texture;
 		return _textureId;
 	}
 
@@ -139,7 +149,7 @@ size_t Engine::SDLRender::LoadTexture(const std::string& filename)
 
 void Engine::SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
 {
-	SDL_Texture* _texture = m_TextureList[id];
+	SDL_Texture* _texture = (*m_TextureList)[id];
 	SDL_RendererFlip _sdlflip = SDL_FLIP_NONE;
 
 	if (flip.h && flip.v) _sdlflip = static_cast<SDL_RendererFlip>(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
@@ -164,7 +174,7 @@ void Engine::SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& ds
 void Engine::SDLRender::DrawTexture(size_t id, const RectF& dst, const Color& color)
 {
 
-	SDL_Texture* _texture = m_TextureList[id];
+	SDL_Texture* _texture = (*m_TextureList)[id];
 	SDL_RendererFlip _sdlflip = SDL_FLIP_NONE;
 
 	SDL_Rect _rectF = { 0 };
@@ -178,7 +188,7 @@ void Engine::SDLRender::DrawTexture(size_t id, const RectF& dst, const Color& co
 
 void Engine::SDLRender::DrawTexture(size_t id, const Color& color)
 {
-	SDL_Texture* _texture = m_TextureList[id];
+	SDL_Texture* _texture = (*m_TextureList)[id];
 	SDL_RendererFlip _sdlflip = SDL_FLIP_NONE;
 
 	SDL_RenderCopyEx(m_Renderer, _texture, nullptr, nullptr, 0, nullptr, _sdlflip);
@@ -192,14 +202,14 @@ size_t Engine::SDLRender::LoadFont(const std::string& filename, int fontSize)
 {
 	const size_t _fontId = std::hash<std::string>()(filename);
 
-	if (_fontId == m_FontIdList[filename]) {
+	if (m_FontList->count(_fontId) > 0) {
 		return _fontId;
 	}
 	std::string _path = SDL_GetBasePath() + filename;
 	TTF_Font* _font = TTF_OpenFont(_path.c_str(), fontSize);
 
 	if (_font != nullptr) {
-		m_FontList.emplace(_fontId,_font);
+		m_FontList->emplace(_fontId,_font);
 		return _fontId;
 	}
 
@@ -218,10 +228,10 @@ void Engine::SDLRender::DrawString(const std::string& text, size_t fontId, float
 	_rect.y = y;
 
 
-	if (m_FontList[fontId] != nullptr)
+	if ((*m_FontList)[fontId] != nullptr)
 	{
 
-		TTF_Font* _font =   m_FontList[fontId];
+		TTF_Font* _font =   (*m_FontList)[fontId];
 		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), _color);
 		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
 		TTF_SizeText(_font, text.c_str(), &_rect.w, &_rect.h);

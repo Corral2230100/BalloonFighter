@@ -14,7 +14,16 @@ namespace Engine
 
 	Object::~Object()
 	{
-
+		for (auto iter : m_Components)
+		{
+			if (iter != nullptr)
+			{
+				delete(iter);
+				iter = nullptr;
+			}
+		}
+		m_Components.clear();
+		m_ComponentByType.clear();
 	}
 
 	void Object::Update(float dt)

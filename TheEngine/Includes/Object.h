@@ -10,7 +10,7 @@ namespace Engine
 	{
 	public:
 		Object(const std::string& name);
-		virtual ~Object();
+		~Object();
 		void Update(float dt);
 		void Init();
 		void Draw(float LagCorrection, float dt);
