@@ -4,65 +4,32 @@
 #include "SDLRender.h"
 #include <map>
 
-class WorldService
+namespace Engine
 {
+	class WorldService
+	{
 
-public:
-	virtual ~WorldService()
-	{
-		for (auto entity : m_EntityWorld)
-		{
-			if (entity != nullptr)
+	public:
+		
+		static WorldService& Get() 
+		{ 
+			static WorldService* m_Instance;
+			if (m_Instance == nullptr)
 			{
-				delete(entity);
-				entity = nullptr;
+				m_Instance = new WorldService();
 			}
+			return *m_Instance; 
 		}
-		m_EntityMap.clear();
-		m_EntityWorld.clear();
-	}
-	void Add(Engine::Object* Entity, Engine::IGraphics* Renderer)
-	{
-		m_EntityWorld.push_back(Entity);
-		m_EntityMap.emplace(Entity->GetName(), Entity);
-		Entity->Init(Renderer);
-	}
-	void Remove(Engine::Object* PEntity)
-	{
-		for (int i = 0; i < m_EntityWorld.size(); i++ )
-		{
-			if (m_EntityWorld[i] == PEntity)
-			{
-				m_EntityMap.erase(PEntity->GetName());
-				delete(m_EntityWorld[i]);
-				m_EntityWorld.erase(m_EntityWorld.begin()+i-1);
-				break;
-			}
-		}
-	}
-	void Update(float dt)
-	{
-		for (auto entity : m_EntityWorld)
-		{
-			entity->Update(dt);
-		}
-	}
-	void Draw(Engine::IGraphics* Renderer,float dt, float LagCorrection)
-	{
-		for (auto entity : m_EntityWorld)
-		{
-			entity->Draw(Renderer,dt,LagCorrection);
-		}
-	}
-	Engine::Object* FindObjectByName(std::string Name)
-	{
-		if (m_EntityMap.count(Name) > 0)
-		{
-			return m_EntityMap[Name];
-		}
-		return nullptr;
-	}
-private:
-	std::map<std::string, Engine::Object*> m_EntityMap;
-	std::vector<Engine::Object*> m_EntityWorld;
-};
+		~WorldService();
+		Object* Create(const std::string& name);
+		void Add(Object* Entity);
+		void Remove(Object* PEntity);
+		void WorldService::Update(float dt);
+		void WorldService::Draw(float dt, float LagCorrection);
+		Object* WorldService::FindObjectByName(std::string Name);
+	private:
+		std::map<std::string, Object*> m_EntityMap;
+		std::vector<Object*> m_EntityWorld;
+		std::vector<Object*> m_InactiveEntityWorld;
+	};
+}

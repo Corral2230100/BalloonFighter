@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 let project = new Project('Balloon Fighter');
 
 project.addIncludeDir("TheEngine/Includes")

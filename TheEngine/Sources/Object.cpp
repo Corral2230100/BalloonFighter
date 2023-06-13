@@ -1,62 +1,68 @@
 #include "Object.h"
-#include <SDL.h>
-Engine::Object::Object(const std::string& Name)
-	:m_Name(Name)
-	,m_x(0)
-	,m_y(0)
+#include <IGraphics.h>
+#include "Engine.h"
+#include "Component.h"
+namespace Engine
 {
+	Object::Object(const std::string& Name)
+		:m_Name(Name)
+		, m_x(0)
+		, m_y(0)
+	{
 
+	}
+
+	Object::~Object()
+	{
+
+	}
+
+	void Object::Update(float dt)
+	{
+		if (!m_Active) return;
+		m_x += VelX * dt;
+		m_y += VelY * dt;
+	}
+
+	void Object::Init()
+	{
+		m_SpriteId = Engine::Get().Graphics().LoadTexture("Assets/Fighter.png");
+
+	}
+
+	void  Object::Draw(float LagCorrection, float dt)
+	{
+
+		if (!m_Active) return;
+		RectF _dest = { m_x,m_y,32,32 };
+		RectI _src = { 8,8,24,24 };
+		Flip _flip = { false,false };
+		double _angle = 0;
+		Color _color = { 255,255,255,255 };
+		Engine::Get().Graphics().DrawTexture(m_SpriteId, _src, _dest, _angle, _flip, _color);
+	}
+
+	void  Object::SetVelX(float Vel)
+	{
+		VelX = Vel;
+	}
+	void  Object::SetVelY(float Vel)
+	{
+		VelY = Vel;
+	}
+
+	void  Object::SetPosition(float NewX, float NewY)
+	{
+		m_x = NewX;
+		m_y = NewY;
+	}
+
+	void  Object::SetActive(bool Setting)
+	{
+		m_Active = Setting;
+	}
 }
 
-Engine::Object::~Object()
-{
-
-}
-
-void Engine::Object::Update(float dt)
-{
-	if (!m_Active) return;
-	m_x += VelX * dt;
-	m_y += VelY * dt;
-}
-
-void Engine::Object::Init(IGraphics* Renderer)
-{
-	m_SpriteId = Renderer->LoadTexture("Assets/Fighter.png");
-
-}
-
-void  Engine::Object::Draw(IGraphics* Renderer, float LagCorrection, float dt)
-{
-
-	if (!m_Active) return;
-	RectF _dest = { m_x,m_y,32,32 };
-	RectI _src = { 8,8,24,24 };
-	Flip _flip = { false,false };
-	double _angle = 0;
-	Color _color = { 255,255,255,255 };
-	Renderer->DrawTexture(m_SpriteId, _src, _dest, _angle, _flip,_color);
-}
-
-void  Engine::Object::SetVelX(float Vel)
-{
-	VelX = Vel;
-}
-void  Engine::Object::SetVelY(float Vel)
-{
-	VelY = Vel;
-}
-
-void  Engine::Object::SetPosition(float NewX, float NewY)
-{
-	m_x = NewX;
-	m_y = NewY;
-}
-
-void  Engine::Object::SetActive(bool Setting)
-{
-	m_Active = Setting;
-}
 
 
 

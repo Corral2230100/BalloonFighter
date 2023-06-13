@@ -125,7 +125,7 @@ size_t Engine::SDLRender::LoadTexture(const std::string& filename)
 	if (_textureId == m_TextureIdList[filename]) {
 		return _textureId;
 	}
-	std::string _path = static_cast<std::string>(SDL_GetBasePath()) + filename.c_str();
+	std::string _path = SDL_GetBasePath() + filename;
 	SDL_Texture* _texture = IMG_LoadTexture(m_Renderer,_path.c_str());
 
 	if (_texture != nullptr) {
@@ -190,16 +190,17 @@ void Engine::SDLRender::GetTextureSize(size_t id, int* w, int* h)
 
 size_t Engine::SDLRender::LoadFont(const std::string& filename, int fontSize)
 {
-	const size_t fontId = std::hash<std::string>()(filename);
+	const size_t _fontId = std::hash<std::string>()(filename);
 
-	if (fontId == m_FontIdList[filename]) {
-		return fontId;
+	if (_fontId == m_FontIdList[filename]) {
+		return _fontId;
 	}
+	std::string _path = SDL_GetBasePath() + filename;
+	TTF_Font* _font = TTF_OpenFont(_path.c_str(), fontSize);
 
-	TTF_Font* _font = TTF_OpenFont(filename.c_str(), fontSize);
 	if (_font != nullptr) {
-		m_FontIdList.emplace(filename.c_str(),fontId);
-		return fontId;
+		m_FontList.emplace(_fontId,_font);
+		return _fontId;
 	}
 
 	return -1;
@@ -212,15 +213,21 @@ void Engine::SDLRender::DrawString(const std::string& text, size_t fontId, float
 	_color.b = color.B;
 	_color.g = color.G;
 	_color.r = color.R;
+	SDL_Rect _rect; 
+	_rect.x = x;  
+	_rect.y = y;
+
+
 	if (m_FontList[fontId] != nullptr)
 	{
 
-		TTF_Font* _font = m_FontList[fontId];
+		TTF_Font* _font =   m_FontList[fontId];
 		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), _color);
 		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
-
-		SDL_RenderCopy(m_Renderer, m_TextureBuffer, nullptr, nullptr);
+		TTF_SizeText(_font, text.c_str(), &_rect.w, &_rect.h);
+		SDL_RenderCopy(m_Renderer, m_TextureBuffer, NULL, &_rect);
 		SDL_FreeSurface(_surface);
+		SDL_DestroyTexture(m_TextureBuffer);
 	}
 }
 

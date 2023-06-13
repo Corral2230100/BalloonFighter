@@ -14,11 +14,23 @@ namespace Engine
 	class Engine final
 	{
 	public:
+		static Engine& Get() 
+		{ 
+			static Engine* m_Instance;
+			if (m_Instance == nullptr)
+			{
+				m_Instance = new Engine();
+			}
+			return *m_Instance;
+		}
 		bool Init(const std::string& Title, int Width, int Height);
 		void Start();
 		void Exit();
 		WorldService* m_World;
 		IInput& Input() const { return *m_Input; }
+		ILogger& Logger() const { return *m_Logger; }
+		IGraphics& Graphics() const { return *m_Graphics; }
+	IAudio& Audio() const { return *m_AudioService; }
 	private:
 		IInput* m_Input = nullptr;
 		ILogger* m_Logger = nullptr;
@@ -29,6 +41,7 @@ namespace Engine
 		void Render(float dt,float LagCorrection);
 		void ShutDown();
 		Object* Test;
+		size_t _TestText;
 	private:
 		bool m_IsRunning = false;
 		bool m_IsInit = false;
