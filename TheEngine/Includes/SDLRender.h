@@ -1,8 +1,10 @@
 #pragma once
 #include "IGraphics.h"
-#include "SDL_ttf.h"
 #include <string>
 #include <map>
+
+typedef struct _TTF_Font TTF_Font;
+struct SDL_Texture;
 struct SDL_Window;
 struct SDL_Renderer;
 namespace Engine
@@ -11,7 +13,7 @@ namespace Engine
 
 class SDLRender : public IGraphics
 {
-
+	
 	public:
 		//void Draw(float dt, float LagCorrection) override;
 		virtual bool Initialize(const std::string& Title, int Width, int Height) override;

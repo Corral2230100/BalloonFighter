@@ -12,6 +12,7 @@ namespace Engine
 		EKEY_S = 22,
 		EKEY_D = 7,
 		EKEY_A = 4,
+		EKEY_H = 11,
 		EKEY_RIGHT = 79,
 		EKEY_LEFT = 80,
 		EKEY_DOWN = 81,

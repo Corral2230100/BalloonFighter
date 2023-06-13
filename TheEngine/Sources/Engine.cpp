@@ -1,3 +1,5 @@
+/// jsteach
+
 
 #include "Engine.h"
 #include <Time.h>
@@ -6,6 +8,7 @@
 #include "FileDebug.h"
 #include "SDLInput.h"
 #include "SDLMixer.h"
+
 namespace Engine
 {
 
@@ -34,12 +37,11 @@ namespace Engine
 
 
 
-		/// Trucs debug
+		/// Trucs test
 		_TestText = m_Graphics->LoadFont("Assets/slkscr.ttf", 24);
-
-		Test = m_World->Create("TestObject1");
-		m_Logger->Print(SDL_GetBasePath());
+		TestCharacter = m_World->Create("TestObject1");
 		size_t _testmusic = m_AudioService->LoadMusic("Assets/Sounds/TitleSong.mp3");
+		_Goodtime = m_AudioService->LoadSound("Assets/Sounds/sfx4.wav");
 		m_AudioService->PlayMusic(_testmusic);
 		///
 		m_IsInit = true;
@@ -94,6 +96,7 @@ namespace Engine
 	/// <summary>
 	/// Handle inputs.
 	/// </summary>
+	/// 
 	void Engine::ProcessInput()
 	{
 		if (!m_IsRunning) return;
@@ -111,39 +114,43 @@ namespace Engine
 	{
 
 		if (!m_IsRunning) return;
+		if (m_Input->IsKeyDown(EKey::EKEY_H))
+		{
+			m_AudioService->PlaySFX(_Goodtime);
+		}
 		/// test player controller---------------
 		if (m_Input->IsKeyDown(EKey::EKEY_RIGHT) || m_Input->IsKeyDown(EKey::EKEY_D))
 		{
-			Test->SetVelX(100);
+			TestCharacter->SetVelX(100);
 		}
 		else if (m_Input->IsKeyDown(EKey::EKEY_LEFT) || m_Input->IsKeyDown(EKey::EKEY_A))
 		{
-			Test->SetVelX(-100);
+			TestCharacter->SetVelX(-100);
 			m_Logger->PrintWarning("aaaaaAAAAA LEEEFT");
 		}
 		else
 		{
-			Test->SetVelX(0);
+			TestCharacter->SetVelX(0);
 		}
 
 		if (m_Input->IsKeyDown(EKey::EKEY_UP) || m_Input->IsKeyDown(EKey::EKEY_W))
 		{
-			Test->SetVelY(-100);
+			TestCharacter->SetVelY(-100);
 		}
 		else if (m_Input->IsKeyDown(EKey::EKEY_DOWN) || m_Input->IsKeyDown(EKey::EKEY_S))
 		{
-			Test->SetVelY(100);
+			TestCharacter->SetVelY(100);
 		}
 		else
 		{
-			Test->SetVelY(0);
+			TestCharacter->SetVelY(0);
 		}
 		/// ---------------------------------------------------
 		m_World->Update(dt);
 #ifdef _DEBUG
 		if (m_Input->IsKeyDown(EKey::EKEY_ESCAPE))
 		{
-			Test = nullptr;
+			TestCharacter = nullptr;
 			Exit();
 		}
 #endif
@@ -159,8 +166,8 @@ namespace Engine
 		if (!m_IsRunning) return;
 		m_Graphics->Clear();
 		m_World->Draw(LagCorrection, dt);
-		Test->Draw(0, 0);
-		m_Graphics->DrawString("Balloon Fight!",_TestText,200,200,Color(0,0,0,255));
+		TestCharacter->Draw(0, 0);
+		m_Graphics->DrawString("Press H for a good time!",_TestText,200,200,Color(0,0,0,255));
 		m_Graphics->Present();
 	}
 

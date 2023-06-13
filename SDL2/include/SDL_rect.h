@@ -1,3 +1,7 @@
+#pragma warning(push)
+#pragma warning(disable : 26812) // disabling a warning when including a header works normally for most warnings.
+#pragma warning(pop)
+
 /*
   Simple DirectMedia Layer
   Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
@@ -107,10 +111,11 @@ typedef struct SDL_FRect
 /**
  * Returns true if point resides inside a rectangle.
  */
+
 SDL_FORCE_INLINE SDL_bool SDL_PointInRect(const SDL_Point *p, const SDL_Rect *r)
 {
-    return ( (p->x >= r->x) && (p->x < (r->x + r->w)) &&
-             (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
+
+    return ( (p->x >= r->x) && (p->x < (r->x + r->w)) && (p->y >= r->y) && (p->y < (r->y + r->h)) ) ? SDL_TRUE : SDL_FALSE;
 }
 
 /**

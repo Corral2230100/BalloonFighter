@@ -1,3 +1,6 @@
+#pragma warning(push)
+#pragma warning(disable : 26812) // disabling a warning when including a header works normally for most warnings.
+#pragma warning(pop)
 /*
   Simple DirectMedia Layer
   Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>

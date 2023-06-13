@@ -52,10 +52,14 @@ void Engine::SDLMixer::PlayMusic(size_t id, int loop)
 
 void Engine::SDLMixer::PlaySFX(size_t id)
 {
+	Mix_Chunk* _SFX = (*m_SoundList)[id];
+	Mix_PlayChannel(0, _SFX, 0);
 }
 
 void Engine::SDLMixer::PlaySFX(size_t id, int loop)
 {
+	Mix_Chunk* _SFX = (*m_SoundList)[id];
+	Mix_PlayChannel(0, _SFX, loop);
 }
 
 void Engine::SDLMixer::PauseMusic()

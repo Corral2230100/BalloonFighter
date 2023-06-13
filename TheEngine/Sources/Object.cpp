@@ -2,6 +2,7 @@
 #include <IGraphics.h>
 #include "Engine.h"
 #include "Component.h"
+#include <IUpdateable.h>
 namespace Engine
 {
 	Object::Object(const std::string& Name)
@@ -31,6 +32,10 @@ namespace Engine
 		if (!m_Active) return;
 		m_x += VelX * dt;
 		m_y += VelY * dt;
+		for (auto iter : m_ComponentByType)
+		{
+
+		}
 	}
 
 	void Object::Init()

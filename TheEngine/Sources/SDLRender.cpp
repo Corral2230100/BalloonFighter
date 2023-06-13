@@ -1,10 +1,44 @@
 #include "SDLRender.h"
 #include "SDLInput.h"
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 #include <SDL.h>
 
+
+static SDL_Color ColorToSDLColor(Engine::Color _color)
+{
+	SDL_Color _newcolor = {};
+	_newcolor.a = static_cast<Uint8>(_color.A);
+	_newcolor.b = static_cast<Uint8>(_color.B);
+	_newcolor.g = static_cast<Uint8>(_color.G);
+	_newcolor.r = static_cast<Uint8>(_color.R);
+	return _newcolor;
+}
+
+static SDL_Rect RectFToSDLRect(Engine::RectF _rect)
+{
+	SDL_Rect _newrect = { 0 };
+	_newrect.x = static_cast<int>(_rect.x);
+	_newrect.y = static_cast<int>(_rect.y);
+	_newrect.w = static_cast<int>(_rect.w);
+	_newrect.h = static_cast<int>(_rect.h);
+
+	return _newrect;
+}
+static SDL_Rect RectIToSDLRect(Engine::RectI _rect)
+{
+	SDL_Rect _newrect = { 0 };
+	_newrect.x = static_cast<int>(_rect.x);
+	_newrect.y = static_cast<int>(_rect.y);
+	_newrect.w = static_cast<int>(_rect.w);
+	_newrect.h = static_cast<int>(_rect.h);
+
+	return _newrect;
+}
 bool Engine::SDLRender::Initialize(const std::string& Title, int Width, int Height)
 {
+
+
 	Uint32 _flag = SDL_WINDOW_TOOLTIP | SDL_WINDOW_RESIZABLE;
 	int _x = SDL_WINDOWPOS_CENTERED;
 	int _y = SDL_WINDOWPOS_CENTERED;
@@ -61,7 +95,8 @@ void Engine::SDLRender::Shutdown()
 
 void Engine::SDLRender::SetColor(const Color& color)
 {
-	SDL_SetRenderDrawColor(m_Renderer,color.R,color.G,color.B,color.A);
+	SDL_Color _color = ColorToSDLColor(color);
+	SDL_SetRenderDrawColor(m_Renderer,_color.r,_color.g,_color.b,_color.a);
 }
 
 void Engine::SDLRender::Clear()
@@ -80,23 +115,17 @@ void Engine::SDLRender::DrawRect(float x, float y, float w, float h, const Color
 {
 	SetColor(color);
 	SDL_Rect _rect = { 0 };
-	_rect.x = x;
-	_rect.y = y;
-	_rect.w = 100;
-	_rect.h = 100;
+	_rect.x = static_cast<int>(x);
+	_rect.y = static_cast<int>(y);
+	_rect.w = static_cast<int>(100);
+	_rect.h = static_cast<int>(100);
 	SDL_RenderFillRect(m_Renderer, &_rect);
 }
 
 void Engine::SDLRender::DrawRect(const RectF& rect, const Color& color)
 {
 	SetColor(color);
-	SDL_Rect _rect = { 0 };
-	_rect.x = rect.x;
-	_rect.y = rect.y;
-	_rect.w = rect.w;
-	_rect.h = rect.h;
-
-
+	SDL_Rect _rect = RectFToSDLRect(rect);
 	SDL_RenderDrawRect(m_Renderer, &_rect);
 }
 
@@ -104,10 +133,10 @@ void Engine::SDLRender::FillRect(float x, float y, float w, float h, const Color
 {
 	SetColor(color);
 	SDL_Rect _rect = { 0 };
-	_rect.x = x;
-	_rect.y = y;
-	_rect.w = w;
-	_rect.h = h;
+	_rect.x = static_cast<int>(x);
+	_rect.y = static_cast<int>(y);
+	_rect.w = static_cast<int>(w);
+	_rect.h = static_cast<int>(h);
 
 	SDL_RenderFillRect(m_Renderer, &_rect);
 }
@@ -115,11 +144,7 @@ void Engine::SDLRender::FillRect(float x, float y, float w, float h, const Color
 void Engine::SDLRender::FillRect(const RectF& rect, const Color& color)
 {
 	SetColor(color);
-	SDL_Rect _rect = { 0 };
-	_rect.x = rect.x;
-	_rect.y = rect.y;
-	_rect.w = rect.w;
-	_rect.h = rect.h;
+	SDL_Rect _rect = RectFToSDLRect(rect);
 
 	SDL_RenderFillRect(m_Renderer, &_rect);
 }
@@ -127,7 +152,7 @@ void Engine::SDLRender::FillRect(const RectF& rect, const Color& color)
 void Engine::SDLRender::DrawLine(float x1, float y1, float x2, float y2, const Color& color)
 {
 	SetColor(color);
-	SDL_RenderDrawLine(m_Renderer, x1, y1, x2, y2);
+	SDL_RenderDrawLine(m_Renderer, static_cast<int>(x1), static_cast<int>(y1), static_cast<int>(x2), static_cast<int>(y2));
 }
 
 size_t Engine::SDLRender::LoadTexture(const std::string& filename)
@@ -149,7 +174,9 @@ size_t Engine::SDLRender::LoadTexture(const std::string& filename)
 
 void Engine::SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
 {
+
 	SDL_Texture* _texture = (*m_TextureList)[id];
+
 	SDL_RendererFlip _sdlflip = SDL_FLIP_NONE;
 
 	if (flip.h && flip.v) _sdlflip = static_cast<SDL_RendererFlip>(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
@@ -163,10 +190,10 @@ void Engine::SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& ds
 	_rect.w = src.w;
 
 	SDL_Rect _rectF = { 0 };
-	_rectF.x = dst.x;
-	_rectF.y = dst.y;
-	_rectF.h = dst.h;
-	_rectF.w = dst.w;
+	_rectF.x = static_cast<int>(dst.x);
+	_rectF.y = static_cast<int>(dst.y);
+	_rectF.h = static_cast<int>(dst.h);
+	_rectF.w = static_cast<int>(dst.w);
 
 	SDL_RenderCopyEx(m_Renderer, _texture, &_rect, &_rectF, angle, nullptr, _sdlflip);
 }
@@ -177,11 +204,7 @@ void Engine::SDLRender::DrawTexture(size_t id, const RectF& dst, const Color& co
 	SDL_Texture* _texture = (*m_TextureList)[id];
 	SDL_RendererFlip _sdlflip = SDL_FLIP_NONE;
 
-	SDL_Rect _rectF = { 0 };
-	_rectF.x = dst.x;
-	_rectF.y = dst.y;
-	_rectF.h = dst.h;
-	_rectF.w = dst.w;
+	SDL_Rect _rectF = RectFToSDLRect(dst);
 
 	SDL_RenderCopyEx(m_Renderer, _texture, nullptr, &_rectF, 0, nullptr, _sdlflip);
 }
@@ -218,21 +241,16 @@ size_t Engine::SDLRender::LoadFont(const std::string& filename, int fontSize)
 
 void Engine::SDLRender::DrawString(const std::string& text, size_t fontId, float x, float y, const Color& color)
 {
-	SDL_Color _color = {};
-	_color.a = color.A;
-	_color.b = color.B;
-	_color.g = color.G;
-	_color.r = color.R;
-	SDL_Rect _rect; 
-	_rect.x = x;  
-	_rect.y = y;
 
+	SDL_Rect _rect; 
+	_rect.x = static_cast<int>(x);
+	_rect.y = static_cast<int>(y);
 
 	if ((*m_FontList)[fontId] != nullptr)
 	{
 
 		TTF_Font* _font =   (*m_FontList)[fontId];
-		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), _color);
+		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), ColorToSDLColor(color));
 		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
 		TTF_SizeText(_font, text.c_str(), &_rect.w, &_rect.h);
 		SDL_RenderCopy(m_Renderer, m_TextureBuffer, NULL, &_rect);
