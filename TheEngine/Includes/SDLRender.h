@@ -3,19 +3,21 @@
 #include <string>
 #include <map>
 
-typedef struct _TTF_Font TTF_Font;
+
 struct SDL_Texture;
 struct SDL_Window;
 struct SDL_Renderer;
-namespace Engine
-{
+typedef struct _TTF_Font TTF_Font;
 
+using namespace Engine2;
 
 class SDLRender : public IGraphics
 {
 	
 	public:
+		/*SDLRender() { m_TextureList = std::map<size_t, SDL_Texture*>(); m_FontList = std::map<size_t, TTF_Font*>(); };*/
 		//void Draw(float dt, float LagCorrection) override;
+		virtual ~SDLRender() = default;
 		virtual bool Initialize(const std::string& Title, int Width, int Height) override;
 		virtual void Shutdown() override;
 		virtual void SetColor(const Color& color) override;
@@ -37,10 +39,8 @@ class SDLRender : public IGraphics
 		SDL_Window* m_Window = nullptr;
 		SDL_Renderer* m_Renderer = nullptr;
 
-		std::map<size_t, SDL_Texture*>* m_TextureList = new std::map<size_t, SDL_Texture*>();
-		std::map<size_t, TTF_Font*>* m_FontList = new std::map<size_t, TTF_Font*>();
+		std::map<size_t, SDL_Texture*> m_TextureList;
+		std::map<size_t, TTF_Font*> m_FontList;
 
 		SDL_Texture* m_TextureBuffer;
 	};
-
-}

@@ -3,7 +3,7 @@
 #include "Engine.h"
 #include "Component.h"
 #include <IUpdateable.h>
-namespace Engine
+namespace Engine2
 {
 	/// <summary>
 	/// Constructeur
@@ -54,7 +54,7 @@ namespace Engine
 	/// </summary>
 	void Object::Init()
 	{
-		m_SpriteId = Engine::Get().Graphics().LoadTexture("Assets/Fighter.png");
+		
 	}
 
 	/// <summary>
@@ -64,14 +64,7 @@ namespace Engine
 	/// <param name="dt"></param>
 	void  Object::Draw(float LagCorrection, float dt)
 	{
-
 		if (!m_Active) return;
-		RectF _dest = { m_x,m_y,32,32 };
-		RectI _src = { 8,8,24,24 };
-		Flip _flip = { false,false };
-		double _angle = 0;
-		Color _color = { 255,255,255,255 };
-		Engine::Get().Graphics().DrawTexture(m_SpriteId, _src, _dest, _angle, _flip, _color);
 	}
 
 	/// <summary>

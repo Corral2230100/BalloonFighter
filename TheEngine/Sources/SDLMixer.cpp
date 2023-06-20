@@ -2,7 +2,7 @@
 #include "SDL_mixer.h"
 #include "SDL.h"
 
-namespace Engine
+namespace Engine2
 {
 	/// <summary>
 	/// Boots up the SDL mixer
@@ -21,14 +21,14 @@ namespace Engine
 	size_t SDLMixer::LoadMusic(const std::string& filename)
 	{
 		const size_t _soundId = std::hash<std::string>()(filename);
-		if (m_MusicList->count(_soundId) > 0) {
+		if (m_MusicList.count(_soundId) > 0) {
 			return _soundId;
 		}
 		std::string _path = static_cast<std::string>(SDL_GetBasePath()) + filename.c_str();
 		Mix_Music* _sound = Mix_LoadMUS(_path.c_str());
 
 		if (_sound != nullptr) {
-			(*m_MusicList)[_soundId] = _sound;
+			m_MusicList[_soundId] = _sound;
 			return _soundId;
 		}
 		return -1;
@@ -42,14 +42,14 @@ namespace Engine
 	size_t SDLMixer::LoadSound(const std::string& filename)
 	{
 		const size_t _soundId = std::hash<std::string>()(filename);
-		if (m_SoundList->count(_soundId) > 0) {
+		if (m_SoundList.count(_soundId) > 0) {
 			return _soundId;
 		}
-		std::string _path = static_cast<std::string>(SDL_GetBasePath()) + filename.c_str();
+		std::string _path = filename;
 		Mix_Chunk* _sound = Mix_LoadWAV(_path.c_str());
 
 		if (_sound != nullptr) {
-			(*m_SoundList)[_soundId] = _sound;
+			m_SoundList[_soundId] = _sound;
 			return _soundId;
 		}
 		return -1;
@@ -61,7 +61,7 @@ namespace Engine
 	/// <param name="id"></param>
 	void SDLMixer::PlayMusic(size_t id)
 	{
-		Mix_Music* _Music = (*m_MusicList)[id];
+		Mix_Music* _Music = m_MusicList[id];
 		Mix_PlayMusic(_Music, false);
 	}
 
@@ -72,7 +72,7 @@ namespace Engine
 	/// <param name="loop"></param>
 	void SDLMixer::PlayMusic(size_t id, int loop)
 	{
-		Mix_Music* _Music = (*m_MusicList)[id];
+		Mix_Music* _Music = m_MusicList[id];
 		Mix_PlayMusic(_Music, loop);
 	}
 
@@ -82,7 +82,7 @@ namespace Engine
 	/// <param name="id"></param>
 	void SDLMixer::PlaySFX(size_t id)
 	{
-		Mix_Chunk* _SFX = (*m_SoundList)[id];
+		Mix_Chunk* _SFX = m_SoundList[id];
 		Mix_PlayChannel(0, _SFX, 0);
 	}
 
@@ -93,15 +93,15 @@ namespace Engine
 	/// <param name="loop"></param>
 	void SDLMixer::PlaySFX(size_t id, int loop)
 	{
-		Mix_Chunk* _SFX = (*m_SoundList)[id];
+		Mix_Chunk* _SFX = m_SoundList[id];
 		Mix_PlayChannel(0, _SFX, loop);
 	}
 
 
 	void SDLMixer::PauseMusic()
 	{
-	}
 
+	}
 
 	void SDLMixer::StopMusic()
 	{
@@ -110,6 +110,7 @@ namespace Engine
 
 	void SDLMixer::ResumeMusic()
 	{
+
 	}
 
 	/// <summary>
@@ -145,20 +146,18 @@ namespace Engine
 	/// </summary>
 	void SDLMixer::ShutDown()
 	{
-		auto iter = m_MusicList->begin();
-		for (auto iter : *m_MusicList)
+		auto iter = m_MusicList.begin();
+		for (auto iter : m_MusicList)
 		{
 			Mix_FreeMusic(iter.second);
 		}
-		for (auto iter : *m_SoundList)
+		for (auto iter : m_SoundList)
 		{
 			Mix_FreeChunk(iter.second);
 		}
-		m_MusicList->clear();
-		m_SoundList->clear();
+		m_MusicList.clear();
+		m_SoundList.clear();
 
-		delete m_MusicList;
-		delete m_SoundList;
 		Mix_CloseAudio();
 	}
 

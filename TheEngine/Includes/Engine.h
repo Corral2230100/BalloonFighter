@@ -9,7 +9,7 @@
 #include "ILogger.h"
 
 
-namespace Engine
+namespace Engine2
 {
 	class Engine final
 	{

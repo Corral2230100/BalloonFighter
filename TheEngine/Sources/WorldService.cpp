@@ -1,5 +1,5 @@
 #include "WorldService.h"
-namespace Engine
+namespace Engine2
 {
 
 	/// <summary>

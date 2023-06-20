@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
-namespace Engine
+namespace Engine2
 {
 	class IAudio
 	{
 	public:
+		virtual ~IAudio() = default;
 		virtual void Init() = 0;
 		virtual size_t LoadMusic(const std::string& filename) = 0;
 		virtual size_t LoadSound(const std::string& filename) = 0;

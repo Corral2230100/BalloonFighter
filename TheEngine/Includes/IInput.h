@@ -1,5 +1,5 @@
 #pragma once
-namespace Engine
+namespace Engine2
 {
 	// SCANCODE.H
 	enum class EButton

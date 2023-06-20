@@ -26,7 +26,7 @@ void SDLInput::Update()
 /// </summary>
 /// <param name="key"></param>
 /// <returns></returns>
-bool SDLInput::IsKeyDown(Engine::EKey key)
+bool SDLInput::IsKeyDown(EKey key)
 {
 	
 	if (m_KeyStates[static_cast<int>(key)] == 1)
@@ -41,7 +41,7 @@ bool SDLInput::IsKeyDown(Engine::EKey key)
 /// </summary>
 /// <param name="button"></param>
 /// <returns></returns>
-bool SDLInput::IsMouseButtonDown(Engine::EButton button)
+bool SDLInput::IsMouseButtonDown(EButton button)
 {
 	return false;
 }

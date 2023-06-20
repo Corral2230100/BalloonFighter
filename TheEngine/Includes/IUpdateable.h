@@ -1,4 +1,4 @@
-namespace Engine
+namespace Engine2
 {
 	class IUpdateable
 	{

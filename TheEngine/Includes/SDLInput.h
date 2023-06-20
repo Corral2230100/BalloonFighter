@@ -1,13 +1,14 @@
 #pragma once
 #include "IInput.h"
 
-class SDLInput final : public Engine::IInput 
+using namespace Engine2;
+class SDLInput final : public IInput 
 {
 public:
 	virtual ~SDLInput() = default;
 
-	virtual bool IsKeyDown(Engine::EKey key) override;
-	virtual bool IsMouseButtonDown(Engine::EButton button) override;
+	virtual bool IsKeyDown(EKey key) override;
+	virtual bool IsMouseButtonDown(EButton button) override;
 	virtual void GetMousePosition(int* m_x, int* m_y) override;
 
 private:

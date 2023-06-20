@@ -4,13 +4,13 @@
 #include "SDL_ttf.h"
 #include <SDL.h>
 
-
+using namespace Engine2;
 /// <summary>
 /// Converts engine's color struct to SDL's
 /// </summary>
 /// <param name="_color"></param>
 /// <returns></returns>
-static SDL_Color ColorToSDLColor(Engine::Color _color)
+static SDL_Color ColorToSDLColor(Color _color)
 {
 	SDL_Color _newcolor = {};
 	_newcolor.a = static_cast<Uint8>(_color.A);
@@ -25,7 +25,7 @@ static SDL_Color ColorToSDLColor(Engine::Color _color)
 /// </summary>
 /// <param name="_rect"></param>
 /// <returns></returns>
-static SDL_Rect RectFToSDLRect(Engine::RectF _rect)
+static SDL_Rect RectFToSDLRect(RectF _rect)
 {
 	SDL_Rect _newrect = { 0 };
 	_newrect.x = static_cast<int>(_rect.x);
@@ -40,7 +40,7 @@ static SDL_Rect RectFToSDLRect(Engine::RectF _rect)
 /// </summary>
 /// <param name="_rect"></param>
 /// <returns></returns>
-static SDL_Rect RectIToSDLRect(Engine::RectI _rect)
+static SDL_Rect RectIToSDLRect(RectI _rect)
 {
 	SDL_Rect _newrect = { 0 };
 	_newrect.x = static_cast<int>(_rect.x);
@@ -57,7 +57,7 @@ static SDL_Rect RectIToSDLRect(Engine::RectI _rect)
 /// <param name="Width"></param>
 /// <param name="Height"></param>
 /// <returns></returns>
-bool Engine::SDLRender::Initialize(const std::string& Title, int Width, int Height)
+bool SDLRender::Initialize(const std::string& Title, int Width, int Height)
 {
 
 
@@ -68,7 +68,7 @@ bool Engine::SDLRender::Initialize(const std::string& Title, int Width, int Heig
 	m_Window = SDL_CreateWindow(Title.c_str(), _x, _y, Width, Height, _flag);
 	if (!m_Window)
 	{
-		SDL_Log(SDL_GetError());
+		//Engine::Get().Logger().PrintError(SDL_GetError());
 		return false;
 	}
 
@@ -76,13 +76,13 @@ bool Engine::SDLRender::Initialize(const std::string& Title, int Width, int Heig
 	m_Renderer = SDL_CreateRenderer(m_Window, -1, _flag);
 	if (!m_Renderer)
 	{
-		SDL_Log(SDL_GetError());
+		//Engine::Get().Logger().PrintError(SDL_GetError());
 		return false;
 	}
 
 	if (SDL_Init(SDL_INIT_EVERYTHING != 0))
 	{
-		SDL_Log(SDL_GetError());
+		//Engine::Get().Logger().PrintError(SDL_GetError());
 		return false;
 	}
 
@@ -93,22 +93,26 @@ bool Engine::SDLRender::Initialize(const std::string& Title, int Width, int Heig
 /// <summary>
 /// Shuts down the renderer, cleans up the surfaces, closes the window.
 /// </summary>
-void Engine::SDLRender::Shutdown()
-{
-	for (auto &iter : *m_TextureList)
+void SDLRender::Shutdown()
+{	
+	auto iter = m_TextureList.begin();
+	while(iter != m_TextureList.end())
+	//for (auto iter : m_TextureList)
 	{
-		SDL_DestroyTexture(iter.second);
-		//iter.second = nullptr;
+		SDL_Texture* _t = (*iter).second;
+		size_t id = (*iter).first;
+		iter++;
+		m_TextureList.erase(id);
+		SDL_DestroyTexture(_t);
 	}
-	for (auto iter : *m_FontList)
+	for (auto iter : m_FontList)
 	{
 		TTF_CloseFont(iter.second);
-		//iter.second = nullptr;
 	}
-	m_FontList->clear();
-	m_TextureList->clear();
-	delete m_TextureList;
-	delete m_FontList;
+	m_FontList.clear();
+	m_TextureList.clear();
+	m_TextureList.clear();
+	//delete m_FontList;
 	TTF_Quit();
 	SDL_DestroyRenderer(m_Renderer);
 	m_Renderer = nullptr;
@@ -122,7 +126,7 @@ void Engine::SDLRender::Shutdown()
 /// Sets the renderer draw color.
 /// </summary>
 /// <param name="color"></param>
-void Engine::SDLRender::SetColor(const Color& color)
+void SDLRender::SetColor(const Color& color)
 {
 	SDL_Color _color = ColorToSDLColor(color);
 	SDL_SetRenderDrawColor(m_Renderer,_color.r,_color.g,_color.b,_color.a);
@@ -131,7 +135,7 @@ void Engine::SDLRender::SetColor(const Color& color)
 /// <summary>
 /// Clears the surface
 /// </summary>
-void Engine::SDLRender::Clear()
+void SDLRender::Clear()
 {
 	SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
 	SDL_RenderClear(m_Renderer);
@@ -141,7 +145,7 @@ void Engine::SDLRender::Clear()
 /// <summary>
 /// Shows the surface to the screen.
 /// </summary>
-void Engine::SDLRender::Present()
+void SDLRender::Present()
 {
 	SDL_RenderPresent(m_Renderer);
 }
@@ -154,7 +158,7 @@ void Engine::SDLRender::Present()
 /// <param name="w"></param>
 /// <param name="h"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::DrawRect(float x, float y, float w, float h, const Color& color)
+void SDLRender::DrawRect(float x, float y, float w, float h, const Color& color)
 {
 	SetColor(color);
 	SDL_Rect _rect = { 0 };
@@ -170,7 +174,7 @@ void Engine::SDLRender::DrawRect(float x, float y, float w, float h, const Color
 /// </summary>
 /// <param name="rect"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::DrawRect(const RectF& rect, const Color& color)
+void SDLRender::DrawRect(const RectF& rect, const Color& color)
 {
 	SetColor(color);
 	SDL_Rect _rect = RectFToSDLRect(rect);
@@ -185,7 +189,7 @@ void Engine::SDLRender::DrawRect(const RectF& rect, const Color& color)
 /// <param name="w"></param>
 /// <param name="h"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::FillRect(float x, float y, float w, float h, const Color& color)
+void SDLRender::FillRect(float x, float y, float w, float h, const Color& color)
 {
 	SetColor(color);
 	SDL_Rect _rect = { 0 };
@@ -202,7 +206,7 @@ void Engine::SDLRender::FillRect(float x, float y, float w, float h, const Color
 /// </summary>
 /// <param name="rect"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::FillRect(const RectF& rect, const Color& color)
+void SDLRender::FillRect(const RectF& rect, const Color& color)
 {
 	SetColor(color);
 	SDL_Rect _rect = RectFToSDLRect(rect);
@@ -218,7 +222,7 @@ void Engine::SDLRender::FillRect(const RectF& rect, const Color& color)
 /// <param name="x2"></param>
 /// <param name="y2"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::DrawLine(float x1, float y1, float x2, float y2, const Color& color)
+void SDLRender::DrawLine(float x1, float y1, float x2, float y2, const Color& color)
 {
 	SetColor(color);
 	SDL_RenderDrawLine(m_Renderer, static_cast<int>(x1), static_cast<int>(y1), static_cast<int>(x2), static_cast<int>(y2));
@@ -229,17 +233,17 @@ void Engine::SDLRender::DrawLine(float x1, float y1, float x2, float y2, const C
 /// </summary>
 /// <param name="filename"></param>
 /// <returns>the texture's hashed id or an existing one if the texture already existed</returns>
-size_t Engine::SDLRender::LoadTexture(const std::string& filename)
+size_t SDLRender::LoadTexture(const std::string& filename)
 {
 	const size_t _textureId = std::hash<std::string>()(filename);
-	if (m_TextureList->count(_textureId) > 0) {
+	if (m_TextureList.count(_textureId) > 0) {
 		return _textureId;
 	}
-	std::string _path = SDL_GetBasePath() + filename;
+	std::string _path = filename;
 	SDL_Texture* _texture = IMG_LoadTexture(m_Renderer,_path.c_str());
 
 	if (_texture != nullptr) {
-		(*m_TextureList)[_textureId] = _texture;
+		m_TextureList.emplace(_textureId,_texture);
 		return _textureId;
 	}
 
@@ -255,10 +259,10 @@ size_t Engine::SDLRender::LoadTexture(const std::string& filename)
 /// <param name="angle"></param>
 /// <param name="flip"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
+void SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& dst, double angle, const Flip& flip, const Color& color)
 {
 
-	SDL_Texture* _texture = (*m_TextureList)[id];
+	SDL_Texture* _texture = (m_TextureList)[id];
 
 	SDL_RendererFlip _sdlflip = SDL_FLIP_NONE;
 
@@ -287,10 +291,10 @@ void Engine::SDLRender::DrawTexture(size_t id, const RectI& src, const RectF& ds
 /// <param name="id"></param>
 /// <param name="dst"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::DrawTexture(size_t id, const RectF& dst, const Color& color)
+void SDLRender::DrawTexture(size_t id, const RectF& dst, const Color& color)
 {
 
-	SDL_Texture* _texture = (*m_TextureList)[id];
+	SDL_Texture* _texture = (m_TextureList)[id];
 	SDL_RendererFlip _sdlflip = SDL_FLIP_NONE;
 
 	SDL_Rect _rectF = RectFToSDLRect(dst);
@@ -303,15 +307,15 @@ void Engine::SDLRender::DrawTexture(size_t id, const RectF& dst, const Color& co
 /// </summary>
 /// <param name="id"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::DrawTexture(size_t id, const Color& color)
+void SDLRender::DrawTexture(size_t id, const Color& color)
 {
-	SDL_Texture* _texture = (*m_TextureList)[id];
+	SDL_Texture* _texture = (m_TextureList)[id];
 	SDL_RendererFlip _sdlflip = SDL_FLIP_NONE;
 
 	SDL_RenderCopyEx(m_Renderer, _texture, nullptr, nullptr, 0, nullptr, _sdlflip);
 }
 
-void Engine::SDLRender::GetTextureSize(size_t id, int* w, int* h)
+void SDLRender::GetTextureSize(size_t id, int* w, int* h)
 {
 }
 
@@ -321,18 +325,18 @@ void Engine::SDLRender::GetTextureSize(size_t id, int* w, int* h)
 /// <param name="filename"></param>
 /// <param name="fontSize"></param>
 /// <returns>returns the font's hashed id or an existing one if it was already loaded.</returns>
-size_t Engine::SDLRender::LoadFont(const std::string& filename, int fontSize)
+size_t SDLRender::LoadFont(const std::string& filename, int fontSize)
 {
 	const size_t _fontId = std::hash<std::string>()(filename);
 
-	if (m_FontList->count(_fontId) > 0) {
+	if (m_FontList.count(_fontId) > 0) {
 		return _fontId;
 	}
 	std::string _path = SDL_GetBasePath() + filename;
 	TTF_Font* _font = TTF_OpenFont(_path.c_str(), fontSize);
 
 	if (_font != nullptr) {
-		m_FontList->emplace(_fontId,_font);
+		m_FontList.emplace(_fontId,_font);
 		return _fontId;
 	}
 
@@ -347,17 +351,17 @@ size_t Engine::SDLRender::LoadFont(const std::string& filename, int fontSize)
 /// <param name="x"></param>
 /// <param name="y"></param>
 /// <param name="color"></param>
-void Engine::SDLRender::DrawString(const std::string& text, size_t fontId, float x, float y, const Color& color)
+void SDLRender::DrawString(const std::string& text, size_t fontId, float x, float y, const Color& color)
 {
 
 	SDL_Rect _rect; 
 	_rect.x = static_cast<int>(x);
 	_rect.y = static_cast<int>(y);
 
-	if ((*m_FontList)[fontId] != nullptr)
+	if (m_FontList[fontId] != nullptr)
 	{
 
-		TTF_Font* _font =   (*m_FontList)[fontId];
+		TTF_Font* _font =   m_FontList[fontId];
 		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), ColorToSDLColor(color));
 		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);
 		TTF_SizeText(_font, text.c_str(), &_rect.w, &_rect.h);

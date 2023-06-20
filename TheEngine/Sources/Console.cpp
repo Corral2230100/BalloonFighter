@@ -5,11 +5,11 @@
 #include <fstream>
 
 static HANDLE hConsole;
-
+using namespace Engine2;
 /// <summary>
 /// Initialies the console service
 /// </summary>
-void Engine::Console::Init()
+void Console::Init()
 {
 	AllocConsole();
 	int _r = freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
@@ -21,7 +21,7 @@ void Engine::Console::Init()
 /// Displays a message in the console
 /// </summary>
 /// <param name="Message"></param>
-void Engine::Console::Print(const std::string Message)
+void Console::Print(const std::string Message)
 {
 	std::cout << Message << std::endl;
 }
@@ -30,7 +30,7 @@ void Engine::Console::Print(const std::string Message)
 /// Displays a red error in the console
 /// </summary>
 /// <param name="Message"></param>
-void Engine::Console::PrintError(const std::string Message)
+void Console::PrintError(const std::string Message)
 {
 	SetConsoleTextAttribute(hConsole, 12);
 	std::cout << "ERROR: " << Message << std::endl;
@@ -40,7 +40,7 @@ void Engine::Console::PrintError(const std::string Message)
 /// Displays a yellow warning in the console
 /// </summary>
 /// <param name="Message"></param>
-void Engine::Console::PrintWarning(const std::string Message)
+void Console::PrintWarning(const std::string Message)
 {
 	SetConsoleTextAttribute(hConsole, 14);
 	std::cout << "WARNING: " << Message << std::endl;
@@ -50,7 +50,7 @@ void Engine::Console::PrintWarning(const std::string Message)
 /// <summary>
 /// Shuts the console down
 /// </summary>
-void Engine::Console::Close()
+void Console::Close()
 {
 	FreeConsole();
 }

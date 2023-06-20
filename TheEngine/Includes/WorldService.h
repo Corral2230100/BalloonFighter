@@ -1,10 +1,9 @@
 #pragma once
 #include <vector>
 #include "Object.h"
-#include "SDLRender.h"
 #include <map>
 
-namespace Engine
+namespace Engine2
 {
 	class WorldService
 	{

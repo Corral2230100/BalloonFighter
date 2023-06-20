@@ -6,11 +6,11 @@
 #include <fstream>
 
 
-
+using namespace Engine2;
 /// <summary>
 /// Initialises the file log
 /// </summary>
-void Engine::FileDebug::Init()
+void FileDebug::Init()
 {
 	 MyFile = new std::ofstream("DebugLog.txt");
 }
@@ -19,7 +19,7 @@ void Engine::FileDebug::Init()
 /// prints a message to the output file.
 /// </summary>
 /// <param name="Message"></param>
-void Engine::FileDebug::Print(const std::string Message)
+void FileDebug::Print(const std::string Message)
 {
 	(*MyFile) << Message << std::endl;
 }
@@ -28,7 +28,7 @@ void Engine::FileDebug::Print(const std::string Message)
 /// prints an error message to the output file
 /// </summary>
 /// <param name="Message"></param>
-void Engine::FileDebug::PrintError(const std::string Message)
+void FileDebug::PrintError(const std::string Message)
 {
 	(*MyFile) << "ERROR: " << Message << std::endl;
 }
@@ -37,7 +37,7 @@ void Engine::FileDebug::PrintError(const std::string Message)
 /// prints a warning to the output file
 /// </summary>
 /// <param name="Message"></param>
-void Engine::FileDebug::PrintWarning(const std::string Message)
+void FileDebug::PrintWarning(const std::string Message)
 {
 	(*MyFile) << "WARNING: " << Message << std::endl;
 }
@@ -45,7 +45,7 @@ void Engine::FileDebug::PrintWarning(const std::string Message)
 /// <summary>
 /// stops edditing the file and "ends" the service
 /// </summary>
-void Engine::FileDebug::Close()
+void FileDebug::Close()
 {
 	(*MyFile).close();
 	delete(MyFile);

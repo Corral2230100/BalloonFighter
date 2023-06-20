@@ -5,13 +5,14 @@
 #include <map>
 struct Mix_Chunk;
 typedef struct _Mix_Music Mix_Music;
-namespace Engine
+namespace Engine2
 {
 	class SDLMixer : public IAudio
 	{
 
 	public:
-		
+
+		virtual ~SDLMixer() = default;
 		virtual void Init() override;
 		virtual size_t LoadMusic(const std::string& filename) override;
 		virtual size_t LoadSound(const std::string& filename) override;
@@ -27,8 +28,8 @@ namespace Engine
 		virtual void SetVolume(size_t soundId, int volume) override;
 		virtual void ShutDown() override;
 	private:
-		std::map<size_t, Mix_Chunk*> *m_SoundList = new std::map<size_t, Mix_Chunk*>();
-		std::map<size_t, Mix_Music*> *m_MusicList = new std::map<size_t, Mix_Music*>();
+		std::map<size_t, Mix_Chunk*>m_SoundList;
+		std::map<size_t, Mix_Music*>m_MusicList;
 
 
 

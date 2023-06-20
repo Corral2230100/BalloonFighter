@@ -1,20 +1,24 @@
 #pragma once
-#include <Object.h>
+#include "Engine.h"
 
-namespace Engine
-{
+using namespace Engine2;
+
+
 	class Component
 	{
 	public:
+		Component() = default;
 		virtual ~Component() = default;
 		Component(Object* parent)
 		{
+			m_Entity = parent;
 		};
-		virtual void Start() {};
-		virtual void Destroy() {};
+		virtual void Start() = 0;
+		virtual void Destroy() = 0;
 	protected:
-		Object *m_Entity = nullptr;
+		Object* m_Entity = nullptr;
+		IInput& GetInput() { return Engine2::Engine::Get().Input();};
 	};
-}
+
 
 

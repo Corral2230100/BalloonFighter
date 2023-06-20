@@ -8,8 +8,8 @@
 #include "FileDebug.h"
 #include "SDLInput.h"
 #include "SDLMixer.h"
-
-namespace Engine
+#include "SDLRender.h"
+namespace Engine2
 {
 
 	/// <summary>
@@ -38,10 +38,10 @@ namespace Engine
 
 
 		/// Trucs test
-		_TestText = m_Graphics->LoadFont("Assets/slkscr.ttf", 24);
+		_TestText = m_Graphics->LoadFont("./Assets/slkscr.ttf", 24);
 		TestCharacter = m_World->Create("TestObject1");
-		size_t _testmusic = m_AudioService->LoadMusic("Assets/Sounds/TitleSong.mp3");
-		_Goodtime = m_AudioService->LoadSound("Assets/Sounds/sfx4.wav");
+		size_t _testmusic = m_AudioService->LoadMusic("./Assets/Sounds/TitleSong.mp3");
+		_Goodtime = m_AudioService->LoadSound("./Assets/Sounds/sfx4.wav");
 		m_AudioService->PlayMusic(_testmusic);
 		m_AudioService->SetMusicVolume(40);
 		///
@@ -69,7 +69,7 @@ namespace Engine
 		while (m_IsRunning)
 		{
 			const clock_t _start = clock();
-			float _elapsed = _start - _end;
+			float _elapsed = static_cast<float>(_start - _end);
 			float _dt = _elapsed * 0.001f;
 			_lag += _elapsed;
 			ProcessInput();
@@ -82,7 +82,7 @@ namespace Engine
 
 			Render(_lag / MilisecondsPerUpdate, _dt);
 
-			float _sleeptime = clock() + MilisecondsPerUpdate - clock();
+			float _sleeptime = static_cast<float>(clock() + MilisecondsPerUpdate - clock());
 			if (_sleeptime >= 0)
 			{
 				Sleep(clock() + MilisecondsPerUpdate - clock());
@@ -115,37 +115,7 @@ namespace Engine
 	{
 
 		if (!m_IsRunning) return;
-		if (m_Input->IsKeyDown(EKey::EKEY_H))
-		{
-			m_AudioService->PlaySFX(_Goodtime);
-		}
-		/// test player controller---------------
-		if (m_Input->IsKeyDown(EKey::EKEY_RIGHT) || m_Input->IsKeyDown(EKey::EKEY_D))
-		{
-			TestCharacter->SetVelX(100);
-		}
-		else if (m_Input->IsKeyDown(EKey::EKEY_LEFT) || m_Input->IsKeyDown(EKey::EKEY_A))
-		{
-			TestCharacter->SetVelX(-100);
-			m_Logger->PrintWarning("aaaaaAAAAA LEEEFT");
-		}
-		else
-		{
-			TestCharacter->SetVelX(0);
-		}
-
-		if (m_Input->IsKeyDown(EKey::EKEY_UP) || m_Input->IsKeyDown(EKey::EKEY_W))
-		{
-			TestCharacter->SetVelY(-100);
-		}
-		else if (m_Input->IsKeyDown(EKey::EKEY_DOWN) || m_Input->IsKeyDown(EKey::EKEY_S))
-		{
-			TestCharacter->SetVelY(100);
-		}
-		else
-		{
-			TestCharacter->SetVelY(0);
-		}
+		
 		/// ---------------------------------------------------
 		m_World->Update(dt);
 #ifdef _DEBUG
@@ -204,7 +174,7 @@ namespace Engine
 		}
 		if (m_AudioService != nullptr)
 		{
-			m_AudioService->StopMusic();
+			m_AudioService->ShutDown();
 			delete(m_AudioService);
 			m_AudioService = nullptr;
 		}

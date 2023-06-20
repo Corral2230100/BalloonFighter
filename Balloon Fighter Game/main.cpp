@@ -4,8 +4,13 @@
 
 #include "Engine.h"
 #include "vld.h"
+#include "Fighter.h"
+using namespace Engine2;
 void InitGameplay()
 {
+	// cringe temporary cancer
+	Fighter* _m = new Fighter();
+
 
 
 }
@@ -15,7 +20,7 @@ void InitGameplay()
 
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT)
 {
-	Engine::Engine& TheEngine = Engine::Engine::Get();
+	Engine& TheEngine = Engine::Get();
 	if (TheEngine.Init("BalloonFight", 800, 600))
 	{
 		InitGameplay();

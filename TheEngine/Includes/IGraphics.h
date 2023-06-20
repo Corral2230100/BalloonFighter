@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace Engine
+namespace Engine2
 {
 	struct Color
 	{
@@ -42,6 +42,7 @@ namespace Engine
 	class IGraphics
 	{
 	public:
+		virtual ~IGraphics() = default;
 		virtual bool Initialize(const std::string& title, int w, int h) = 0;
 		virtual void Shutdown() = 0;
 		virtual void SetColor(const Color& color) = 0;

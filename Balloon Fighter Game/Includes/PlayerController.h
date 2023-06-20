@@ -1,5 +1,5 @@
 #include "IUpdateable.h"
-using namespace Engine;
+using namespace Engine2;
 
 class PlayerController : IUpdateable
 {
