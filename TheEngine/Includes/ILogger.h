@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-namespace Engine2
+namespace TomNook
 {
 	class ILogger
 	{

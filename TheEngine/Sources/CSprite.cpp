@@ -1,5 +1,6 @@
 #include "CSprite.h"
-
+#include "Object.h"
+using namespace TomNook;
 void CSprite::Update()
 {
 

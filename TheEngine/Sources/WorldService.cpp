@@ -1,6 +1,6 @@
 #include "WorldService.h"
-namespace Engine2
-{
+#include "Object.h"
+using namespace TomNook;
 
 	/// <summary>
 	/// Constructor
@@ -92,6 +92,3 @@ namespace Engine2
 		}
 		return nullptr;
 	}
-
-
-}

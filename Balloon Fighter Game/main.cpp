@@ -5,7 +5,7 @@
 #include "Engine.h"
 #include "vld.h"
 #include "Fighter.h"
-using namespace Engine2;
+using namespace TomNook;
 void InitGameplay()
 {
 	// cringe temporary cancer

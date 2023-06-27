@@ -6,7 +6,7 @@
 #include <fstream>
 
 
-using namespace Engine2;
+using namespace TomNook;
 /// <summary>
 /// Initialises the file log
 /// </summary>

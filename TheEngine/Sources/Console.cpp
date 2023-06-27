@@ -5,7 +5,7 @@
 #include <fstream>
 
 static HANDLE hConsole;
-using namespace Engine2;
+using namespace TomNook;
 /// <summary>
 /// Initialies the console service
 /// </summary>

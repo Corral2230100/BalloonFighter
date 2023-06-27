@@ -1,10 +1,11 @@
 #pragma once
 #include <vector>
-#include "Object.h"
 #include <map>
+#include <string>
 
-namespace Engine2
+namespace TomNook
 {
+	class Object;
 	class WorldService
 	{
 

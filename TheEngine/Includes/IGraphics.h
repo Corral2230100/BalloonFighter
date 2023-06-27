@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace Engine2
+namespace TomNook
 {
 	struct Color
 	{

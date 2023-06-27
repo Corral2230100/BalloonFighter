@@ -1,6 +1,6 @@
 
 
-namespace Engine2
+namespace TomNook
 {
 	class IScene
 	{

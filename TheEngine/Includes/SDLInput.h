@@ -1,7 +1,7 @@
 #pragma once
 #include "IInput.h"
 
-using namespace Engine2;
+using namespace TomNook;
 class SDLInput final : public IInput 
 {
 public:

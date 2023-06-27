@@ -1,11 +1,10 @@
 #pragma once
 #include "IAudio.h"
-
 #include <string>
 #include <map>
 struct Mix_Chunk;
 typedef struct _Mix_Music Mix_Music;
-namespace Engine2
+namespace TomNook
 {
 	class SDLMixer : public IAudio
 	{

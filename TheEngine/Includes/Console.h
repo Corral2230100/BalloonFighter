@@ -2,7 +2,7 @@
 #include "ILogger.h"
 
 
-namespace Engine2
+namespace TomNook
 {
 	class Console : public ILogger
 	{

@@ -9,7 +9,7 @@ struct SDL_Window;
 struct SDL_Renderer;
 typedef struct _TTF_Font TTF_Font;
 
-using namespace Engine2;
+using namespace TomNook;
 
 class SDLRender : public IGraphics
 {

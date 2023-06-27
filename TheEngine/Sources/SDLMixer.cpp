@@ -2,7 +2,7 @@
 #include "SDL_mixer.h"
 #include "SDL.h"
 
-namespace Engine2
+namespace TomNook
 {
 	/// <summary>
 	/// Boots up the SDL mixer

@@ -4,7 +4,7 @@
 #include "SDL_ttf.h"
 #include <SDL.h>
 
-using namespace Engine2;
+using namespace TomNook;
 /// <summary>
 /// Converts engine's color struct to SDL's
 /// </summary>

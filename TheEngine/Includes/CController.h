@@ -2,18 +2,23 @@
 #include "Component.h"
 #include "IUpdateable.h"
 
-
-
-class CController : public Component, public IUpdateable
+namespace TomNook
 {
-public:
-	virtual ~CController();
-	// Hérité via Component
-	virtual void Start() override;
-	virtual void Destroy() override;
-	// Hérité via IUpdateable
-	virtual void Update() override;
-private:
-	
+	class CController : public Component, public IUpdateable
+	{
+	public:
+		CController(Object* parent) : Component(parent)
+		{
+		};
+		virtual ~CController();
+		// Hérité via Component
+		virtual void Start() override;
+		virtual void Destroy() override;
+		// Hérité via IUpdateable
+		virtual void Update() override;
+	private:
 
-};
+
+	};
+}
+

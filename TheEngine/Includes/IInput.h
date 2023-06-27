@@ -1,5 +1,5 @@
 #pragma once
-namespace Engine2
+namespace TomNook
 {
 	// SCANCODE.H
 	enum class EButton

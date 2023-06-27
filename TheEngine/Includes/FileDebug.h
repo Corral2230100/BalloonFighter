@@ -1,7 +1,7 @@
 #pragma once
 #include "ILogger.h"
 
-namespace Engine2
+namespace TomNook
 {
 	class FileDebug : public ILogger
 	{

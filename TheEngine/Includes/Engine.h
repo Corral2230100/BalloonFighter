@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "Object.h"
 #include "IInput.h"
 #include "IGraphics.h"
 #include "IAudio.h"
@@ -9,7 +8,7 @@
 #include "ILogger.h"
 
 
-namespace Engine2
+namespace TomNook
 {
 	class Engine final
 	{
@@ -23,6 +22,7 @@ namespace Engine2
 			}
 			return *m_Instance;
 		}
+		const float& DeltaTime() { return m_dt; };
 		bool Init(const std::string& Title, int Width, int Height);
 		void Start();
 		void Exit();
@@ -31,6 +31,7 @@ namespace Engine2
 		ILogger& Logger() const { return *m_Logger; }
 		IGraphics& Graphics() const { return *m_Graphics; }
 		IAudio& Audio() const { return *m_AudioService; }
+
 	private:
 		IInput* m_Input = nullptr;
 		ILogger* m_Logger = nullptr;
@@ -40,12 +41,12 @@ namespace Engine2
 		void Update(float dt);
 		void Render(float dt,float LagCorrection);
 		void ShutDown();
-		Object* TestCharacter = nullptr;
 		size_t _TestText = -1;
 		size_t _Goodtime = -1;
 	private:
 		bool m_IsRunning = false;
 		bool m_IsInit = false;
+		float m_dt = 0.0f;
 		
 	};
 }
