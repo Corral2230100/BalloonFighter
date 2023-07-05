@@ -1,44 +1,11 @@
 #pragma once
 #include <vector>
 #include <string>
-
+#include "DataTypes.h"
 
 namespace TomNook
 {
-	struct Color
-	{
-	public:
-		float R = 0;
-		float G = 0;
-		float B = 0;
-		float A = 0;
-		Color(float r,float g,float b,float a)
-		{
-			float R = r;
-			float G = g;
-			float B = b;
-			float A = a;
-		}
-	};
-	struct RectF
-	{
-		float x;
-		float y;
-		float w;
-		float h;
-	};
-	struct RectI
-	{
-		int x;
-		int y;
-		int w;
-		int h;
-	};
-	struct Flip
-	{
-		bool h;
-		bool v;
-	};
+
 	class IGraphics
 	{
 	public:

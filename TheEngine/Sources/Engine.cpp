@@ -24,6 +24,7 @@ bool Engine::Init(const std::string& Title, int Width, int Height)
 #endif
 	m_Logger->Init();
 	m_World = new WorldService();
+	m_Physics = new PhysicsService();
 	m_Graphics = new SDLRender();
 	m_Input = new SDLInput();
 	m_AudioService = new SDLMixer();
@@ -158,6 +159,11 @@ void Engine::ShutDown()
 	{
 		delete(m_World);
 		m_World = nullptr;
+	}
+	if (m_Physics != nullptr)
+	{
+		delete(m_Physics);
+		m_Physics = nullptr;
 	}
 	if (m_Graphics != nullptr)
 	{

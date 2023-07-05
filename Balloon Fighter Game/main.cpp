@@ -5,11 +5,15 @@
 #include "Engine.h"
 #include "vld.h"
 #include "Fighter.h"
+#include "Block.h"
+
+
+
 using namespace TomNook;
+
 void InitGameplay()
 {
-	// cringe temporary cancer
-	Fighter* _m = new Fighter();
+
 
 
 
@@ -21,11 +25,20 @@ void InitGameplay()
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT)
 {
 	Engine& TheEngine = Engine::Get();
+	Fighter* _fighter{};
+	Block* _block{};
+
 	if (TheEngine.Init("BalloonFight", 800, 600))
 	{
 		InitGameplay();
+		// cringe temporary cancer
+		_fighter = new Fighter();
+		// More temporary cringe
+		_block = new Block();
 		TheEngine.Start();
 	}
-	delete &TheEngine;
+	delete _fighter;
+	delete _block;
+	delete& TheEngine;
 	return 0;
 }

@@ -42,5 +42,5 @@ class SDLRender : public IGraphics
 		std::map<size_t, SDL_Texture*> m_TextureList;
 		std::map<size_t, TTF_Font*> m_FontList;
 
-		SDL_Texture* m_TextureBuffer;
+		SDL_Texture* m_TextureBuffer{};
 	};

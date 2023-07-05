@@ -1,21 +1,16 @@
 #include "CSprite.h"
 #include "Object.h"
 using namespace TomNook;
-void CSprite::Update()
-{
 
-}
 
 void CSprite::Draw()
 {
-	RectF _dest = { m_Entity->X(),m_Entity->Y(),m_SizeX,m_SizeY };
-	RectI _src =
+	RectF _dest = { m_Entity->X(),m_Entity->Y(),m_SpriteSource.w,m_SpriteSource.h};
+	RectI _src = m_SpriteSource;
+	if (m_Flip.h == true)
 	{
-		m_OffsetX + (m_SizeX - 1) * m_Index,
-		m_OffsetY + (m_SizeY - 1) * m_Index,
-		m_SizeX,
-		m_SizeY
-	};
+		_dest.x -= static_cast<float>(m_SpriteSource.w*0.5);
+	}
 	Engine::Get().Graphics().DrawTexture(m_Id, _src, _dest, m_Angle, m_Flip, m_Color);
 }
 

@@ -25,6 +25,7 @@ namespace TomNook
 
 		float X() { return m_Position[0];}
 		float Y() { return m_Position[1];}
+		Vector2* Size() { return &m_Size; }
 		float* Position() { return m_Position; }
 		std::string GetName() { return m_Name; }
 
@@ -66,6 +67,7 @@ namespace TomNook
 		std::vector<IDrawable*> m_ComponentsToDraw;
 		std::vector<IUpdateable*> m_ComponentsToUpdate;
 		float m_Position[2] = {0};
+		Vector2 m_Size = { 0,0 };
 		std::string m_Name;
 		float m_Active = true;
 		/// Need to put this in another class later VV

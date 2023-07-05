@@ -6,10 +6,11 @@
 #include "IAudio.h"
 #include "WorldService.h"
 #include "ILogger.h"
-
+#include "PhysicsService.h"
 
 namespace TomNook
 {
+
 	class Engine final
 	{
 	public:
@@ -26,12 +27,13 @@ namespace TomNook
 		bool Init(const std::string& Title, int Width, int Height);
 		void Start();
 		void Exit();
-		WorldService* m_World = nullptr;;
+		WorldService* m_World = nullptr;
+		PhysicsService* m_Physics = nullptr;
 		IInput& Input() const { return *m_Input; }
 		ILogger& Logger() const { return *m_Logger; }
 		IGraphics& Graphics() const { return *m_Graphics; }
 		IAudio& Audio() const { return *m_AudioService; }
-
+		
 	private:
 		IInput* m_Input = nullptr;
 		ILogger* m_Logger = nullptr;

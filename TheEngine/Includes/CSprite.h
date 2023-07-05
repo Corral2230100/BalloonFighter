@@ -5,14 +5,12 @@
 
 namespace TomNook
 {
-	class CSprite : public Component, public IUpdateable, public IDrawable
+	class CSprite : public Component, public IDrawable
 	{
 	public:
 		CSprite(Object* parent) : Component(parent)
 		{
 		};
-		// Hérité via IUpdateable
-		virtual void Update() override;
 		// Hérité via IDrawable
 		virtual void Draw() override;
 
@@ -23,22 +21,12 @@ namespace TomNook
 
 		// Self
 		void LoadTexture(std::string AssetPath);
-
-	private:
+		void SetFlip(Flip newflip) { m_Flip = newflip; };
+	protected:
 		size_t m_Id = 0;
+		RectI m_SpriteSource{};
 
-		int m_Index = 0;
-
-		int m_SizeX = 24;
-		int m_SizeY = 24;
-
-		int m_OffsetX = 8;
-		int m_OffsetY = 8;
-
-		int m_GapX = 0;
-		int m_GapY = 1;
-
-		Flip m_Flip = { false,false };
+		Flip m_Flip = { false,false};
 		Color m_Color = { 255,255,255,255 };
 		double m_Angle = 0;
 

@@ -317,6 +317,7 @@ void SDLRender::DrawTexture(size_t id, const Color& color)
 
 void SDLRender::GetTextureSize(size_t id, int* w, int* h)
 {
+	SDL_QueryTexture(m_TextureList[id], NULL, NULL, w, h);
 }
 
 /// <summary>

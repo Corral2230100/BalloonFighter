@@ -2,33 +2,61 @@
 #include "SDL.h"
 #include "stdio.h"
 #include "Engine.h"
-/// <summary>
-/// Registers events and inputs from the SDL library at runtime
-/// </summary>
+#include <cstring>
+
+
+SDLInput::SDLInput()
+{
+
+	m_KeyStates = const_cast <unsigned char*> (SDL_GetKeyboardState(&m_StateSize));
+	m_PreviousKeyStates = new unsigned char[m_StateSize];
+}
+
+SDLInput::~SDLInput()
+{
+	delete m_PreviousKeyStates;
+	m_PreviousKeyStates = nullptr;
+}
+
+
 void SDLInput::Update()
 {
+		if (m_KeyStates != nullptr)
+		{
+			memcpy(m_PreviousKeyStates, m_KeyStates,m_StateSize);
+		}
 		SDL_Event _event;
-
 		while (SDL_PollEvent(&_event))
 		{
+			m_KeyStates = const_cast <unsigned char*> (SDL_GetKeyboardState(nullptr));
 			switch (_event.type)
 			{
 			case SDL_QUIT:
-				Engine::Engine::Get().Exit();
+				Engine::Get().Exit();
+				return;
 				break;
 			}
+			
 		}
-			m_KeyStates = const_cast <unsigned char*> (SDL_GetKeyboardState(nullptr));
+
+		
 }
 
-/// <summary>
-/// Checks the state of a given key
-/// </summary>
-/// <param name="key"></param>
-/// <returns></returns>
-bool SDLInput::IsKeyDown(EKey key)
+bool SDLInput::IsKeyUp(EKey key)
 {
-	
+	if (m_KeyStates[static_cast<int>(key)] == 0)
+	{
+		if (m_PreviousKeyStates != nullptr && m_PreviousKeyStates[static_cast<int>(key)] == 1)
+		{
+
+		}
+		return true;
+	}
+	return false;
+}
+
+bool SDLInput::IsKeyHeld(EKey key)
+{
 	if (m_KeyStates[static_cast<int>(key)] == 1)
 	{
 		return true;
@@ -36,21 +64,28 @@ bool SDLInput::IsKeyDown(EKey key)
 	return false;
 }
 
-/// <summary>
-/// Checks the state of a mouse button
-/// </summary>
-/// <param name="button"></param>
-/// <returns></returns>
+
+
+bool SDLInput::IsKeyDown(EKey key)
+{
+	if (m_KeyStates[static_cast<int>(key)] == 1 )
+	{
+		if (m_PreviousKeyStates != nullptr && m_PreviousKeyStates[static_cast<int>(key)] == 0)
+		{
+			return true;
+		}
+
+	}
+	return false;
+}
+
+
 bool SDLInput::IsMouseButtonDown(EButton button)
 {
 	return false;
 }
 
-/// <summary>
-/// Checks the mouse's position
-/// </summary>
-/// <param name="m_x"></param>
-/// <param name="m_y"></param>
+
 void SDLInput::GetMousePosition(int* m_x, int* m_y)
 {
 

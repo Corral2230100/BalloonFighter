@@ -1,14 +1,18 @@
 #pragma once
 #include "Component.h"
 #include "IUpdateable.h"
-
+#include "Subject.h"
+#include <map>
+#include <functional>
 namespace TomNook
 {
 	class CController : public Component, public IUpdateable
 	{
 	public:
-		CController(Object* parent) : Component(parent)
+		
+		CController(Object* parent) : Component(parent), m_Inputs(Engine::Get().Input())		
 		{
+			
 		};
 		virtual ~CController();
 		// Hérité via Component
@@ -16,8 +20,12 @@ namespace TomNook
 		virtual void Destroy() override;
 		// Hérité via IUpdateable
 		virtual void Update() override;
-	private:
+		std::map<EKey,std::function<void()>> m_InputBindingsDown;
+		std::map<EKey, std::function<void()>> m_InputBindingsUp;
+		IInput& m_Inputs;
 
+	private:
+		
 
 	};
 }

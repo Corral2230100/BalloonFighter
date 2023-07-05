@@ -31,6 +31,8 @@ namespace TomNook
 
 
 		virtual bool IsKeyDown(EKey key) = 0;
+		virtual bool IsKeyUp(EKey key) = 0;
+		virtual bool IsKeyHeld(EKey key) = 0;
 		virtual bool IsMouseButtonDown(EButton button) = 0;
 		virtual void GetMousePosition(int* m_x, int* m_y) = 0;
 

@@ -4,13 +4,13 @@
 #include "CPhysics.h"
 #include "BoxCollider.h"
 using namespace TomNook;
-class Fighter
+
+class Block
 {
 public:
-	Fighter();
-	~Fighter();
-	void Float();
+	Block();
+	~Block();
 private:
-	Object* m_Fighter;
+	Object* m_Block = nullptr;
 	BoxCollider* TempBox = nullptr;
 };
