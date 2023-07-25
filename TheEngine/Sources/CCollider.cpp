@@ -6,6 +6,7 @@ TomNook::CCollider::~CCollider()
 {
 	if (m_Collider != nullptr)
 	{
+		Engine::Get().m_Physics->RemoveCollider(m_Collider);
 		delete m_Collider;
 		m_Collider = nullptr;
 	}

@@ -1,6 +1,7 @@
 #include "CPhysics.h"
 #include "Object.h"
 #include "Subject.h"
+#include "Colliders.h"
 using namespace TomNook;
 float lerp(float a, float b, float f)
 {
@@ -36,24 +37,39 @@ void CPhysics::Start()
 
 void CPhysics::Destroy()
 {
+	OnCollision.RemoveListeners();
 }
 
 void CPhysics::OnNotify(const CollisionInfo& value)
 {
 
-		if (value.CollisionDir.x != 0)
+		if (value.OtherObject->GetTag("Bouncy"))
 		{
-			m_Entity->Position()[0] -= VelX* TomNook::Engine::Get().DeltaTime();
-			VelX = -VelX / 2;
-			
+			if (value.CollisionDir.x != 0)
+			{
+				VelX = value.CollisionDir.x * 30.0f;
+			}
+			if (value.CollisionDir.y != 0)
+			{
+				VelY = value.CollisionDir.y * 10.0f;
+			}
 		}
-		if (value.CollisionDir.y != 0)
+		else
 		{
-			m_Entity->Position()[1] -= VelY * TomNook::Engine::Get().DeltaTime();
-			VelY = -VelY / 4;
-			
-			GravityTimer = 0.0f;
-		}	
+			if (value.CollisionDir.x != 0)
+			{
+				m_Entity->Position()[0] -= VelX * TomNook::Engine::Get().DeltaTime();
+				VelX = -VelX / 2;
+			}
+			if (value.CollisionDir.y != 0)
+			{
+				m_Entity->Position()[1] -= VelY * TomNook::Engine::Get().DeltaTime();
+				VelY = -VelY / 4;
+				VelX /= 2;
+				GravityTimer = 0.0f;
+			}
+		}
+		
 		OnCollision.Invoke(value);
 }
 

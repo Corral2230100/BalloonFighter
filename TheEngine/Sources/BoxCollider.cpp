@@ -5,7 +5,9 @@
 using namespace TomNook;
 CollisionInfo BoxCollider::CollideWithBox(BoxCollider* other)
 {
+	
 	CollisionInfo _info;
+	if (other == nullptr) return _info;
 	_info.OtherObject = other->m_Parent->GetParent();
 	_info.Victim = this;
 	_info.Aggressor = other;
@@ -13,7 +15,7 @@ CollisionInfo BoxCollider::CollideWithBox(BoxCollider* other)
 	std::vector<Vector2> _rect2 = other->Corners;
 
 
-
+	
 	CPhysics* _physics = m_Parent->GetParent()->GetComponent<CPhysics>();
 	if (_physics != nullptr)
 	{
@@ -26,7 +28,15 @@ CollisionInfo BoxCollider::CollideWithBox(BoxCollider* other)
 				{
 					_info.CollisionPoint = { 0,0 };
 					_info.Hit = true;
-					_info.CollisionDir.x = 1;
+					if (_rect1[0].x > _rect2[0].x)
+					{
+						_info.CollisionDir.x = 1;
+					}
+					else
+					{
+						_info.CollisionDir.x = -1;
+					}
+					
 				}
 			}
 			if (_rect2[0].x < _rect1[1].x && _rect2[1].x > _rect1[0].x)
@@ -35,7 +45,14 @@ CollisionInfo BoxCollider::CollideWithBox(BoxCollider* other)
 				{
 					_info.CollisionPoint = { 0,0 };
 					_info.Hit = true;
-					_info.CollisionDir.y = 1;
+					if (_rect1[0].y > _rect2[0].y)
+					{
+						_info.CollisionDir.y = 1;
+					}
+					else
+					{
+						_info.CollisionDir.y = -1;
+					}
 				}
 			}
 	}

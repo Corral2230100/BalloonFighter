@@ -8,8 +8,8 @@ Menu::~Menu()
 
 void Menu::Start()
 {
-	m_TextFont = Engine::Get().Graphics().LoadFont("./Assets/slkscr.ttf", 8);
 
+	m_TextFont = Engine::Get().Graphics().LoadFont("./Assets/slkscr.ttf", 8);
 	m_Music = Engine::Get().Audio().LoadMusic("./Assets/Sounds/TitleSong.mp3");
 	Engine::Get().Audio().PlayMusic(m_Music);
 	Engine::Get().Audio().SetMusicVolume(40);

@@ -342,7 +342,7 @@ size_t SDLRender::LoadFont(const std::string& filename, int fontSize)
 	if (m_FontList.count(_fontId) > 0) {
 		return _fontId;
 	}
-	std::string _path = SDL_GetBasePath() + filename;
+	std::string _path = filename;
 	TTF_Font* _font = TTF_OpenFont(_path.c_str(), fontSize);
 
 	if (_font != nullptr) {

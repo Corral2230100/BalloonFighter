@@ -16,6 +16,10 @@ namespace TomNook
 		{
 			m_Observers.remove(object);
 		}
+		void RemoveListeners()
+		{
+			m_Observers.clear();
+		}
 		void Invoke(const T& value)
 		{
 			for (Observer<T>* o : m_Observers)
@@ -27,4 +31,4 @@ namespace TomNook
 		std::list<Observer<T>*> m_Observers;
 	};
 }
-
+

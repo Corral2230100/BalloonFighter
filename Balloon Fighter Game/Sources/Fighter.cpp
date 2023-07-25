@@ -15,7 +15,7 @@ Fighter::~Fighter()
 void Fighter::Start()
 {
 	BaseFighter::Start();
-
+	m_Entity->SetTag("Poke");
 	m_Entity->AddComponent<CController>();
 	std::function<void()> _func = std::bind(&Fighter::FloatInput, this);
 	m_Entity->GetComponent<CController>()->m_InputBindingsDown.emplace(EKey::EKEY_SPACE, _func);
@@ -53,4 +53,9 @@ void Fighter::FloatInput()
 		m_Animator->SetFlip(Flip{ true,false });
 	}
 	Float(_dir);
+}
+
+void Fighter::OnDeath()
+{
+
 }

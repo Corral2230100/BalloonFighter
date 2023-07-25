@@ -27,16 +27,20 @@ void BaseFighter::Float(int direction)
 
 	Engine::Get().Audio().PlaySFX(FlapSound);
 	float _CurVelY = m_Entity->GetComponent<CPhysics>()->GetVelY();
-	m_Entity->GetComponent<CPhysics>()->SetVelY(_CurVelY - 10.0f, false);
+	m_Entity->GetComponent<CPhysics>()->SetVelY(_CurVelY - 8.0f, false);
 	float _CurVelX = m_Entity->GetComponent<CPhysics>()->GetVelX();
 
 
-	m_Entity->GetComponent<CPhysics>()->SetVelX(_CurVelX += (12.0f * direction));
+	m_Entity->GetComponent<CPhysics>()->SetVelX(_CurVelX += (10.0f * direction));
 }
 
 void BaseFighter::PopBalloon()
 {
 	BalloonsLeft--;
+	if (BalloonsLeft <= 0)
+	{
+		OnDeath();
+	}
 }
 
 
@@ -44,7 +48,7 @@ void BaseFighter::PopBalloon()
 void BaseFighter::Start()
 {
 	(*m_Entity->Size()) = Vector2{ 24,24 };
-
+	m_Entity->SetTag("Bouncy");
 	FlapSound = Engine::Get().Audio().LoadSound("./Assets/Sounds/Flap.wav");
 
 	m_Animator = m_Entity->AddComponent<CAnimation>();
@@ -86,9 +90,17 @@ void BaseFighter::OnNotify(const CollisionInfo& value)
 	};
 	if (BalloonBox->CollideWithBox(static_cast<BoxCollider*>(value.Aggressor)).Hit)
 	{
-		PopBalloon();
+		if (value.OtherObject->GetTag("Poke"))
+		{
+			PopBalloon();
+		}
 	}
+	Engine::Get().m_Physics->RemoveCollider(BalloonBox);
+	delete BalloonBox;
+	BalloonBox = nullptr;
 }
+
+
 
 
 

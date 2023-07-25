@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "BoxCollider.h"
 #include "CAnimation.h"
+#include "Subject.h"
 using namespace TomNook;
 
 class BaseFighter : public Component, public Observer<CollisionInfo>
@@ -19,6 +20,8 @@ public:
 	virtual void Start() override;
 	virtual void Destroy() override;
 	virtual void OnNotify(const CollisionInfo& value) override;
+	Subject<int> OnDeathNotify;
+	virtual void OnDeath() = 0;
 protected:
 	/// <summary>
 	/// Does the flap animation and gives the little momentum boost based on direction parameter.
@@ -33,5 +36,9 @@ protected:
 private:
 
 
+
+
+	// Hérité via Observer
+	
 
 };

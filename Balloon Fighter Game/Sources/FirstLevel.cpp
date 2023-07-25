@@ -8,6 +8,9 @@
 #include "CController.h"
 #include "CCollider.h"
 #include "BoxCollider.h"
+#include "MainGame.h"
+#include "EnnemyFighter.h"
+
 using namespace TomNook;
 
 
@@ -105,9 +108,17 @@ void FirstLevel::Load()
 	_map->AddLayer("layer1", _layer1);
 	_map->AddLayer("layer2", _layer2);
 
-	Object* m_Fighter = Engine::Get().m_World->Create("Fighter1");
-	m_Fighter->SetPosition(32.0f, 100.0f);
-	m_Fighter->AddComponent<Fighter>()->Start();
+	Object* _Fighter = Engine::Get().m_World->Create("Player");
+	_Fighter->SetPosition(32.0f, 100.0f);
+	_Fighter->AddComponent<Fighter>()->Start();
+
+	Object* _Fighter2 = Engine::Get().m_World->Create("Ennemy1");
+	_Fighter2->SetPosition(232.0f, 100.0f);
+	_Fighter2->AddComponent<EnnemyFighter>()->Start();
+
+	Object* _MainHud = Engine::Get().m_World->Create("MainWindow");
+	_MainHud->AddComponent<MainGame>()->Start();
+	_Fighter2->GetComponent<EnnemyFighter>()->OnDeathNotify.AddListener(_MainHud->GetComponent<MainGame>());
 
 	block(120, 8, 64, 112);
 	block(56, 24, 0, 200);

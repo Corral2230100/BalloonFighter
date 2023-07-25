@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "IUpdateable.h"
 #include "IDrawable.h"
+#include <string>
 using namespace TomNook;
 	/// <summary>
 	/// Constructeur
@@ -92,6 +93,18 @@ using namespace TomNook;
 	void  Object::SetActive(bool Setting)
 	{
 		m_Active = Setting;
+	}
+
+	bool TomNook::Object::GetTag(std::string TagToSearch)
+	{
+		for (auto it =m_Tags.begin(); it != m_Tags.end(); ++it)
+		{
+			if (*it == TagToSearch)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 

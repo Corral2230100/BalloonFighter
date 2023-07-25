@@ -22,8 +22,8 @@ namespace TomNook
 		void Draw(float LagCorrection, float dt);
 		void SetPosition(float NewX, float NewY);
 		void SetActive(bool Setting);
-		void SetTag(std::string newtag) { m_Tag = newtag; };
-		std::string GetTag() { return m_Tag; }
+		void SetTag(std::string newtag) { m_Tags.push_back(newtag); };
+		bool GetTag(std::string TagToSearch);
 		float X() { return m_Position[0];}
 		float Y() { return m_Position[1];}
 		Vector2* Size() { return &m_Size; }
@@ -71,7 +71,7 @@ namespace TomNook
 		Vector2 m_Size = { 0,0 };
 		std::string m_Name;
 		float m_Active = true;
-		std::string m_Tag;
+		std::vector<std::string> m_Tags;
 		/// Need to put this in another class later VV
 
 	};

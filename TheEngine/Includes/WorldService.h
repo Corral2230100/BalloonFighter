@@ -63,7 +63,6 @@ namespace TomNook
 		void CleanEntities();
 		void UpdateLoadScene();
 
-
 		std::map<std::string, Object*> m_EntityMap;
 		std::vector<Object*> m_EntityWorld;
 		std::vector<Object*> m_InactiveEntityWorld;

@@ -26,4 +26,8 @@ private:
 	/// </summary>
 	void FloatInput();
 
+
+	// Hérité via BaseFighter
+	virtual void OnDeath() override;
+
 };

@@ -49,25 +49,19 @@ void WorldService::Add(Object* Entity)
 
 void WorldService::Remove(Object* PEntity)
 {
-	for (int i = 0; i < m_EntityWorld.size(); i++)
-	{
-		if (m_EntityWorld[i] == PEntity)
-		{
-			m_EntityMap.erase(PEntity->GetName());
-			delete(m_EntityWorld[i]);
-			m_EntityWorld.erase(m_EntityWorld.begin() + i - 1);
-			break;
-		}
-	}
+	m_EntityToRemove.push_back(PEntity);
 }
 
 void WorldService::Update(float dt)
 {
 	for (auto entity : m_EntityWorld)
 	{
-		entity->Update(dt);
+		if (entity != nullptr)
+		{
+			entity->Update(dt);
+		}
+		
 	}
-
 	UpdateLoadScene();
 	CleanEntities();
 }
@@ -158,3 +152,4 @@ void WorldService::UpdateLoadScene()
 		m_SceneToLoad.clear();
 	}
 }
+
