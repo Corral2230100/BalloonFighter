@@ -85,7 +85,8 @@ bool SDLRender::Initialize(const std::string& Title, int Width, int Height)
 		//Engine::Get().Logger().PrintError(SDL_GetError());
 		return false;
 	}
-
+	SDL_RenderSetScale(m_Renderer,
+		3.0f,3.0f);
 	TTF_Init();
 	return false;
 }
@@ -137,9 +138,9 @@ void SDLRender::SetColor(const Color& color)
 /// </summary>
 void SDLRender::Clear()
 {
-	SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_Renderer);
-
+	SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
 }
 
 /// <summary>
@@ -320,6 +321,14 @@ void SDLRender::GetTextureSize(size_t id, int* w, int* h)
 	SDL_QueryTexture(m_TextureList[id], NULL, NULL, w, h);
 }
 
+Vector2 SDLRender::GetScreenSize()
+{
+	int _w = 0;
+	int _h = 0;
+	SDL_GetWindowSize(m_Window, &_w, &_h);
+	return Vector2{_w/3,_h/3};
+}
+
 /// <summary>
 /// Loads a font into memory and stores it
 /// </summary>
@@ -361,7 +370,6 @@ void SDLRender::DrawString(const std::string& text, size_t fontId, float x, floa
 
 	if (m_FontList[fontId] != nullptr)
 	{
-
 		TTF_Font* _font =   m_FontList[fontId];
 		SDL_Surface* _surface = TTF_RenderText_Solid(_font, text.c_str(), ColorToSDLColor(color));
 		m_TextureBuffer = SDL_CreateTextureFromSurface(m_Renderer, _surface);

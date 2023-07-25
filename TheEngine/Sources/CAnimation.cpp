@@ -1,5 +1,5 @@
 #include "CAnimation.h"
-
+#include <vector>
 
 
 void TomNook::CAnimation::InitAnimation(std::string path, int width, int height)
@@ -24,9 +24,9 @@ void TomNook::CAnimation::Draw()
 	CSprite::Draw();
 }
 
-void TomNook::CAnimation::AddClip(const std::string& name, int* frameindexes, float delay)
+void TomNook::CAnimation::AddClip(const std::string& name, std::vector<int> frameindexes, float delay)
 {
-	std::pair<int*, float> _pair(frameindexes, delay);
+	std::pair<std::vector<int>, float> _pair(frameindexes, delay);
 	m_AnimationClips.emplace(name, _pair);
 }
 
@@ -45,10 +45,10 @@ void TomNook::CAnimation::Play(const std::string& name, bool loop)
 	}
 	m_Loop = loop;
 	m_CurrentAnim = name;
-	std::pair<int*, float> _clip = m_AnimationClips[name];
+	std::pair<std::vector<int>, float> _clip = m_AnimationClips[name];
 	m_Index = 0;
-	m_AnimationLength = sizeof(*_clip.first) / sizeof(_clip.first[0]);
-	m_SpriteSource = m_Frames[m_Index];
+	m_AnimationLength = _clip.first.size()-1;
+	m_SpriteSource = m_Frames[m_AnimationClips[m_CurrentAnim].first[m_Index]];
 	m_TimeElapsed = _clip.second;
 	m_Playing = true;
 }
@@ -73,6 +73,6 @@ void TomNook::CAnimation::Update()
 			}
 		}
 		m_TimeElapsed = m_AnimationClips[m_CurrentAnim].second;
-		m_SpriteSource = m_Frames[m_Index];
+		m_SpriteSource = m_Frames[m_AnimationClips[m_CurrentAnim].first[m_Index]];
 	}
 }

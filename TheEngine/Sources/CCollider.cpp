@@ -31,9 +31,11 @@ void TomNook::CCollider::Update()
 }
 
 void TomNook::CCollider::Start()
-{
+{  
+
 }
 
 void TomNook::CCollider::Destroy()
 {
+
 }

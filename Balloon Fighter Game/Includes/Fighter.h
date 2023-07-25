@@ -1,16 +1,29 @@
+#pragma once
 #include "Engine.h"
 #include "CSprite.h"
 #include "CController.h"
-#include "CPhysics.h"
+#include "Component.h"
 #include "BoxCollider.h"
+#include "CAnimation.h"
+#include "BaseFighter.h"
+
 using namespace TomNook;
-class Fighter
+
+class Fighter: public BaseFighter
 {
 public:
-	Fighter();
+	Fighter(Object* parent) : BaseFighter(parent) {};
 	~Fighter();
-	void Float();
+	
+
+	/// From BaseFighter
+	virtual void Start() override;
+	virtual void Destroy() override;
+
 private:
-	Object* m_Fighter;
-	BoxCollider* TempBox = nullptr;
+	/// <summary>
+	/// Handle's the player's inputs before calling BaseFighter's Float.
+	/// </summary>
+	void FloatInput();
+
 };

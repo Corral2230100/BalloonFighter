@@ -33,6 +33,7 @@ class SDLRender : public IGraphics
 		virtual void DrawTexture(size_t id, const RectF& dst, const Color& color) override;
 		virtual void DrawTexture(size_t id, const Color& color) override;
 		virtual void GetTextureSize(size_t id, int* w, int* h) override;
+		virtual Vector2 GetScreenSize() override;
 		virtual size_t LoadFont(const std::string& filename, int fontSize) override;
 		virtual void DrawString(const std::string& text, size_t fontId, float x, float y, const Color& color) override;
 	private:

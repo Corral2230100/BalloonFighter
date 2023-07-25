@@ -43,8 +43,6 @@ namespace TomNook
 		void Update(float dt);
 		void Render(float dt,float LagCorrection);
 		void ShutDown();
-		size_t _TestText = -1;
-		size_t _Goodtime = -1;
 	private:
 		bool m_IsRunning = false;
 		bool m_IsInit = false;

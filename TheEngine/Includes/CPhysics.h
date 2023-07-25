@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "IUpdateable.h"
 #include "IObserver.h"
+#include "Subject.h"
 namespace TomNook
 {
 	class CCollider;
@@ -26,6 +27,8 @@ namespace TomNook
 		virtual void Start() override;
 		virtual void Destroy() override;
 		virtual void OnNotify(const CollisionInfo& value) override;
+		Subject<CollisionInfo> OnCollision;
+		Subject<CollisionInfo> OnTrigger;
 	private:
 
 
@@ -40,9 +43,10 @@ namespace TomNook
 		float Drag = 0.0f;
 		CollisionInfo m_Collision{};
 		bool  UseGravity = false;
-		float GravityForce = 40.0f;
+		float GravityForce = 25.0f;
 		float GravityModifier = 0.0f;
 		float GravityTimer = 0.0f;
+		float LastPosition[2] = { 0,0 };
 
 
 

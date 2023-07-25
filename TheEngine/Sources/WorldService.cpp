@@ -1,94 +1,160 @@
 #include "WorldService.h"
 #include "Object.h"
+#include "IScene.h"
 using namespace TomNook;
 
-	/// <summary>
-	/// Constructor
-	/// </summary>
-	WorldService::~WorldService()
+
+WorldService::~WorldService()
+{
+
+	Unload();
+
+	for (auto scene : m_SceneRegistry)
 	{
-		for (auto entity : m_EntityWorld)
+		delete scene.second;
+	}
+
+	m_SceneRegistry.clear();
+
+	for (auto entity : m_EntityWorld)
+	{
+		if (entity != nullptr)
 		{
-			if (entity != nullptr)
+			delete(entity);
+			entity = nullptr;
+		}
+	}
+	m_EntityMap.clear();
+	m_EntityWorld.clear();
+}
+
+Object* WorldService::Create(const std::string& name)
+{
+	std::string _name = name;
+	if (m_EntityMap.count(name) != 0)
+	{
+		_name = name + std::to_string(m_EntityMap.count(name));
+	}
+	Object* _object = new Object(_name);
+	Add(_object);
+	return _object;
+}
+
+void WorldService::Add(Object* Entity)
+{
+	m_EntityWorld.push_back(Entity);
+	m_EntityMap.emplace(Entity->GetName(), Entity);
+	Entity->Init();
+}
+
+void WorldService::Remove(Object* PEntity)
+{
+	for (int i = 0; i < m_EntityWorld.size(); i++)
+	{
+		if (m_EntityWorld[i] == PEntity)
+		{
+			m_EntityMap.erase(PEntity->GetName());
+			delete(m_EntityWorld[i]);
+			m_EntityWorld.erase(m_EntityWorld.begin() + i - 1);
+			break;
+		}
+	}
+}
+
+void WorldService::Update(float dt)
+{
+	for (auto entity : m_EntityWorld)
+	{
+		entity->Update(dt);
+	}
+
+	UpdateLoadScene();
+	CleanEntities();
+}
+
+void WorldService::Draw(float dt, float LagCorrection)
+{
+	for (auto entity : m_EntityWorld)
+	{
+		entity->Draw(dt, LagCorrection);
+	}
+}
+
+Object* WorldService::FindObjectByName(std::string Name)
+{
+	if (m_EntityMap.count(Name) > 0)
+	{
+		return m_EntityMap[Name];
+	}
+	return nullptr;
+}
+
+void WorldService::Load(const std::string& scene)
+{
+	if (m_SceneRegistry.count(scene) > 0)
+	{
+		m_SceneToLoad = scene;
+	}
+}
+
+void WorldService::Register(const std::string& name, IScene* scene)
+{
+	if (m_SceneRegistry.count(name) == 0)
+	{
+		m_SceneRegistry[name] = scene;
+	}
+}
+
+void WorldService::Unload()
+{
+	for (auto entity : m_EntityWorld)
+	{
+		delete entity;
+	}
+
+	//for (auto entity : m_EntityToRemove)
+	//{
+	//	delete entity;
+	//}
+
+	m_EntityWorld.clear();
+	m_EntityMap.clear();
+	//m_EntityRemove.clear();
+}
+
+
+void WorldService::CleanEntities()
+{
+	if (m_EntityToRemove.size() > 0)
+	{
+		std::vector<Object*> _trash = m_EntityToRemove;
+		m_EntityToRemove.clear();
+
+		for (auto entity : _trash)
+		{
+			m_EntityMap.erase(entity->GetName());
+
+			for (auto it = m_EntityWorld.begin(); it != m_EntityWorld.end(); ++it)
 			{
-				delete(entity);
-				entity = nullptr;
+				if (entity == *it)
+				{
+					m_EntityWorld.erase(it);
+					delete entity;
+					break;
+				}
 			}
 		}
-		m_EntityMap.clear();
-		m_EntityWorld.clear();
+
+		_trash.clear();
 	}
-	/// <summary>
-	/// Creates a new object into the world and returns a reference to it.
-	/// </summary>
-	/// <param name="name"></param>
-	/// <returns></returns>
-	Object* WorldService::Create(const std::string& name)
+}
+
+void WorldService::UpdateLoadScene()
+{
+	if (!m_SceneToLoad.empty())
 	{
-			Object* _object = new Object(name);
-			Add(_object);
-			return _object;
+		Unload();
+		m_SceneRegistry[m_SceneToLoad]->Load();
+		m_SceneToLoad.clear();
 	}
-	/// <summary>
-	/// Adds a new object to the world.
-	/// </summary>
-	/// <param name="Entity"></param>
-	void WorldService::Add(Object* Entity)
-	{
-		m_EntityWorld.push_back(Entity);
-		m_EntityMap.emplace(Entity->GetName(), Entity);
-		Entity->Init();
-	}
-	/// <summary>
-	/// Removed an object from the world.
-	/// </summary>
-	/// <param name="PEntity"></param>
-	void WorldService::Remove(Object* PEntity)
-	{
-		for (int i = 0; i < m_EntityWorld.size(); i++)
-		{
-			if (m_EntityWorld[i] == PEntity)
-			{
-				m_EntityMap.erase(PEntity->GetName());
-				delete(m_EntityWorld[i]);
-				m_EntityWorld.erase(m_EntityWorld.begin() + i - 1);
-				break;
-			}
-		}
-	}
-	/// <summary>
-	/// Updates all the objects in the world.
-	/// </summary>
-	/// <param name="dt"></param>
-	void WorldService::Update(float dt)
-	{
-		for (auto entity : m_EntityWorld)
-		{
-			entity->Update(dt);
-		}
-	}
-	/// <summary>
-	/// Draws all objects in the world.
-	/// </summary>
-	/// <param name="dt"></param>
-	/// <param name="LagCorrection"></param>
-	void WorldService::Draw( float dt, float LagCorrection)
-	{
-		for (auto entity : m_EntityWorld)
-		{
-			entity->Draw(dt, LagCorrection);
-		}
-	}
-	/// <summary>
-	/// Searches for an object by it's name.
-	/// </summary>
-	/// <param name="Name"></param>
-	/// <returns> hopefully a reference or nullptr</returns>
-	Object* WorldService::FindObjectByName(std::string Name)
-	{
-		if (m_EntityMap.count(Name) > 0)
-		{
-			return m_EntityMap[Name];
-		}
-		return nullptr;
-	}
+}

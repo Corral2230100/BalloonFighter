@@ -25,6 +25,7 @@ namespace TomNook
 		virtual void DrawTexture(size_t id, const RectF& dst, const Color& color) = 0;
 		virtual void DrawTexture(size_t id, const Color& color) = 0;
 		virtual void GetTextureSize(size_t id, int* w, int* h) = 0;
+		virtual Vector2 GetScreenSize() = 0;
 		virtual size_t LoadFont(const std::string& filename, int fontSize) = 0;
 		virtual void DrawString(const std::string& text, size_t fontId, float x,float y, const Color& color) = 0;
 		

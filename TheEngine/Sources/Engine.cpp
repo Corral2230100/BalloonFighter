@@ -33,13 +33,7 @@ bool Engine::Init(const std::string& Title, int Width, int Height)
 
 
 
-	/// Trucs test
-	_TestText = m_Graphics->LoadFont("./Assets/slkscr.ttf", 24);
-	size_t _testmusic = m_AudioService->LoadMusic("./Assets/Sounds/TitleSong.mp3");
-	_Goodtime = m_AudioService->LoadSound("./Assets/Sounds/sfx4.wav");
-	m_AudioService->PlayMusic(_testmusic);
-	m_AudioService->SetMusicVolume(40);
-	///
+
 	m_IsInit = true;
 	return true;
 }
@@ -132,7 +126,6 @@ void Engine::Render(float dt, float LagCorrection)
 	if (!m_IsRunning) return;
 	m_Graphics->Clear();
 	m_World->Draw(LagCorrection, dt);
-	m_Graphics->DrawString("Press H for a good time!", _TestText, 200, 200, Color(0, 0, 0, 255));
 	m_Graphics->Present();
 }
 

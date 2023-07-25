@@ -43,6 +43,16 @@ using namespace TomNook;
 		{
 			component->Update();
 		}
+
+		float _x = Engine::Get().Graphics().GetScreenSize().x;
+		if (m_Position[0]-m_Size.x/2 > _x)
+		{
+			m_Position[0] -= _x;
+		}
+		else if (m_Position[0] + m_Size.x/2 < 0)
+		{
+			m_Position[0] += _x;
+		}
 	}
 
 	/// <summary>

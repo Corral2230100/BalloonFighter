@@ -19,13 +19,16 @@ PhysicsService::~PhysicsService()
 
 CollisionInfo PhysicsService::CheckCollisions(Collider* collider)
 {
+	CollisionInfo _info = {};
 	for (int i = 0; i < m_Colliders.size(); i++)
 	{
 		if (collider != m_Colliders[i])
 		{
-			return SolveCollisions(collider, m_Colliders[i]);
+			_info = SolveCollisions(collider, m_Colliders[i]);
+			if (_info.Hit) break;
 		}	
 	}
+	return _info;
 }
 
 void TomNook::PhysicsService::AddCollider(Collider* collider)

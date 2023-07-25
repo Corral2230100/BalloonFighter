@@ -4,16 +4,16 @@
 
 #include "Engine.h"
 #include "vld.h"
-#include "Fighter.h"
-#include "Block.h"
-
-
+#include "FirstLevel.h"
+#include "TitleScreen.h"
 
 using namespace TomNook;
 
 void InitGameplay()
 {
-
+	Engine::Get().m_World->Register("Level1", new FirstLevel());
+	Engine::Get().m_World->Register("Title", new TitleScreen());
+	Engine::Get().m_World->Load("Title");
 
 
 
@@ -25,20 +25,12 @@ void InitGameplay()
 INT WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ INT)
 {
 	Engine& TheEngine = Engine::Get();
-	Fighter* _fighter{};
-	Block* _block{};
 
-	if (TheEngine.Init("BalloonFight", 800, 600))
+	if (TheEngine.Init("BalloonFight", 768, 720))
 	{
 		InitGameplay();
-		// cringe temporary cancer
-		_fighter = new Fighter();
-		// More temporary cringe
-		_block = new Block();
 		TheEngine.Start();
 	}
-	delete _fighter;
-	delete _block;
 	delete& TheEngine;
 	return 0;
 }

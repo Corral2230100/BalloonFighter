@@ -1,6 +1,6 @@
 #include "CPhysics.h"
 #include "Object.h"
-
+#include "Subject.h"
 using namespace TomNook;
 float lerp(float a, float b, float f)
 {
@@ -11,41 +11,27 @@ void CPhysics::Update()
 {
 	if (UseGravity)
 	{
-
-		GravityTimer = clip(GravityTimer + TomNook::Engine::Get().DeltaTime()*0.05f,0.0f,1.0f);
+		GravityTimer = clip(GravityTimer + TomNook::Engine::Get().DeltaTime()*0.04f,0.0f,1.0f);
 		GravityModifier = lerp(0, GravityForce, GravityTimer);
 	}
+	VelY += GravityModifier;
 	VelX = clip(VelX, VelXCap[0], VelXCap[1]);
 	VelY = clip(VelY, VelYCap[0], VelYCap[1]);
 	
 
-	/// A Changer avec un futur setting de bouciness par objet physique
-	if (m_Collision.CollisionDir.x != 0)
-	{
-		VelX = -VelX/2;
-	}
-	if (m_Collision.CollisionDir.y != 0)
-	{
-		VelY = -VelY/4;
-		GravityTimer = 0.0f;
-	}
-	else
-	{
-		VelY += GravityModifier;
-	}
-	///
-
 	float _X = VelX * TomNook::Engine::Get().DeltaTime();
 	float _Y = VelY  * TomNook::Engine::Get().DeltaTime() ;
 	float* vec = m_Entity->Position();
-
 	vec[0] += _X;
 	vec[1] += _Y;
 	m_Collision.CollisionDir = { 0,0 };
+	LastPosition[0] = m_Entity->X();
+	LastPosition[1] = m_Entity->Y();
 }
 
 void CPhysics::Start()
 {
+	
 }
 
 void CPhysics::Destroy()
@@ -54,7 +40,21 @@ void CPhysics::Destroy()
 
 void CPhysics::OnNotify(const CollisionInfo& value)
 {
-	m_Collision = value;
+
+		if (value.CollisionDir.x != 0)
+		{
+			m_Entity->Position()[0] -= VelX* TomNook::Engine::Get().DeltaTime();
+			VelX = -VelX / 2;
+			
+		}
+		if (value.CollisionDir.y != 0)
+		{
+			m_Entity->Position()[1] -= VelY * TomNook::Engine::Get().DeltaTime();
+			VelY = -VelY / 4;
+			
+			GravityTimer = 0.0f;
+		}	
+		OnCollision.Invoke(value);
 }
 
 

@@ -100,17 +100,17 @@ namespace TomNook
 
 	void SDLMixer::PauseMusic()
 	{
-
+		Mix_PauseMusic();
 	}
 
 	void SDLMixer::StopMusic()
 	{
-
+		Mix_HaltMusic();
 	}
 
 	void SDLMixer::ResumeMusic()
 	{
-
+		Mix_ResumeMusic();
 	}
 
 	/// <summary>
